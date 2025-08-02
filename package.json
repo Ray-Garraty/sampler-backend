@@ -1,0 +1,25 @@
+{
+  "name": "sampler",
+  "version": "1.0.0",
+  "repository": "https://github.com/Ray-Garraty/sampler.git",
+  "description": "sampler frontend and backend",
+  "keywords": [
+    "nodejs",
+    "raspberrypi4"
+  ],
+  "license": "ISC",
+  "author": "Ray-Garraty",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.7",
+    "cors": "^2.8.5",
+    "ds18x20": "^0.2.0",
+    "express": "^5.1.0",
+    "onoff": "^6.0.3",
+    "raspi-soft-pwm": "^6.0.2"
+  }
+}
