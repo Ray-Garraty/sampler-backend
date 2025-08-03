@@ -1,0 +1,10 @@
+Pinout scheme
+
+End device wire: Physical pin No / GPIO No / ONOFF No
+
+DS18b20 Temp Sensor data: 7 / 4 / 516
+Cooler Solid State Relay VCC: 11 / 17 / 529
+Tube Water Sensor data: 13 / 27 / 539
+Stepper PULSE-STEP (yellow): 40 / 21 / 533
+Stepper DIR (white): 38 / 20 / 532
+Stepper EN (green): 36 / 16 / 528
