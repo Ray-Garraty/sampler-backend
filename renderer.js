@@ -1,3 +1,7 @@
+window.onload = function() {
+  window.resizeTo(800, 480);
+};
+
 const coolerBtn = document.getElementById('Cooler on/off');
 const pumpButton = document.getElementById('Pump on/off');
 const servoButton = document.getElementById('Move servo');
@@ -87,16 +91,20 @@ servoAngleInput.addEventListener('input', () => {
 const inquireTempSensors = async () => {
   const temperaturesResponse = await fetch('http://localhost:3000/temperatures');
   const temps = await temperaturesResponse.json();
-  console.log('Current temperatures:', temps);
-	tempFields.forEach((field, i) => {
-	  field.innerText = temps[i] + '⁰C';
-    field.classList.remove(...field.classList);
-    if (temps[i] > 4.2) {
-      field.classList.add('btn', 'btn-lg', 'btn-outline-danger');
-    } else {
-      field.classList.add('btn', 'btn-lg', 'btn-outline-success');
-    };
-  });
+  if (temps[0] === -273) {
+		console.log('No response from temperature sensors...');
+	} else {
+		console.log('Current temperatures:', temps);
+		tempFields.forEach((field, i) => {
+			field.innerText = temps[i] + '⁰C';
+			field.classList.remove(...field.classList);
+			if (temps[i] > 4.2) {
+				field.classList.add('btn', 'btn-lg', 'btn-outline-danger');
+			} else {
+				field.classList.add('btn', 'btn-lg', 'btn-outline-success');
+			};
+		});
+	} 
 };
 
 const inquireTubeSensor = async () => {

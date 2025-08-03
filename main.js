@@ -1,5 +1,9 @@
 import cors from 'cors';
 import express from 'express';
+import managePump from './hardware/pump.js';
+import toggleCooler from './hardware/cooler.js';
+import readTubeSensor from './hardware/tubesensors.js';
+import readTemperatures from './hardware/tempsensors.js';
 
 const app = express();
 const port = 3000;
@@ -15,10 +19,11 @@ app.get('/coolerStatus', (req, res) => {
   res.send(isCoolerOn);
 });
 
-app.get('/toggleCooler', (req, res) => {
+app.get('/toggleCooler',  (req, res) => {
+  const pendingStatus = !isCoolerOn;
+  toggleCooler(pendingStatus);
   isCoolerOn = !isCoolerOn;
-  console.log('Received toggle cooler request, its new status is: ', isCoolerOn);
-  res.send(isCoolerOn);
+  res.send(pendingStatus);
 });
 
 app.get('/pumpStatus', (req, res) => {
@@ -28,6 +33,7 @@ app.get('/pumpStatus', (req, res) => {
 app.post('/api/managePump', (req, res) => {
   const requestedSpeed = req.body.speed;
   console.log('Received manage pump request with speed:', requestedSpeed);
+  managePump(requestedSpeed);
   pumpSpeed = requestedSpeed;
   res.json({ message: 'New pump speed is', data: { speed: pumpSpeed } });
 });
@@ -39,14 +45,17 @@ app.post('/api/manageServo', (req, res) => {
   res.json({ message: 'New servo position is', data: { position: servoPosition } });
 });
 
-app.get('/temperatures', (req, res) => {
-  res.send([0, 0, 0]);
+app.get('/temperatures', async (req, res) => {
+  const temperatures = await readTemperatures();
+  console.log({ temperatures });
+  res.send(temperatures || [-273, -273, -273]);
 });
 
-app.get('/tubeSensorStatus', (req, res) => {
-  res.send(false); // false = full, true = empty
+app.get('/tubeSensorStatus', async (req, res) => {
+  const isTubeEmpty = await readTubeSensor();
+  res.send(isTubeEmpty);
 });
 
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+  console.log(`\nServer listening at http://localhost:${port}`);
 });
