@@ -11,18 +11,17 @@ const readTemperatures = os.platform() === 'win32' ?
     return temps;
   }
 : 
-  () => {
-		sensor.getAll((err, tempObj) => {
-			try {
-				console.log('Raw temp sensors data:', tempObj);
-				return Object.values(tempObj);		
-			} catch (error) {
-				return error;
-			}
-		});
-  }
+  () => new Promise((resolve, reject) => {
+		sensor.getAll((error, data) => {
+      if (error) {
+				console.error(error);
+        reject(error);
+      } else {
+				console.log('Raw temp sensors data:', data);
+        resolve(data);
+      }
+    });
+	})
 ;
 
 export default readTemperatures;
-
-  

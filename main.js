@@ -32,8 +32,9 @@ app.get('/pumpStatus', (req, res) => {
 
 app.post('/api/managePump', (req, res) => {
   const requestedSpeed = req.body.speed;
-  console.log('Received manage pump request with speed:', requestedSpeed);
-  managePump(requestedSpeed);
+  const requestedDirection = req.body.direction;
+  console.log('Received manage pump request with speed:', requestedSpeed, 'and dir:', requestedDirection);
+  managePump(requestedSpeed, requestedDirection);
   pumpSpeed = requestedSpeed;
   res.json({ message: 'New pump speed is', data: { speed: pumpSpeed } });
 });
@@ -47,8 +48,8 @@ app.post('/api/manageServo', (req, res) => {
 
 app.get('/temperatures', async (req, res) => {
   const temperatures = await readTemperatures();
-  console.log({ temperatures });
-  res.send(temperatures || [-273, -273, -273]);
+  // console.log({ temperatures });
+  res.send(Object.values(temperatures) || [-273, -273, -273]);
 });
 
 app.get('/tubeSensorStatus', async (req, res) => {

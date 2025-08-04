@@ -18,10 +18,16 @@
     
   <div class="container-fluid text-center">
     <div class="row">
-      <div class="col border">
+      <div class="col border align-content-center flex-wrap">
         <div class="p-3">
-          <button type="button" class="btn btn-success btn-lg" id="Cooler on/off">Включить Пельтье</button>
-        </div>
+					<button type="button" class="btn btn-lg btn-success" id="Cooler on/off">
+						<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" id="coolerSpinner"></span></span>
+						<span id="coolerText">Включить Пельтье</span>
+					</button>
+				</div>
+      </div>
+      <div class="col border align-content-center flex-wrap">
+        <button type="button" class="btn btn-lg btn-outline-secondary" id="Tube status">Нет данных от датчика воды в трубке</button>
       </div>
     </div>
     <div class="row">
@@ -43,17 +49,27 @@
     </div>
     <div class="row">
       <div class="col border align-content-center flex-wrap">
-        <button type="button" class="btn btn-success btn-lg" id="Pump on/off">Включить насос</button>
+        <button type="button" class="btn btn-success btn-lg" id="Pump on/off">
+					<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="pumpSpinner"></span>
+					<span id="pumpText">Включить насос</span>
+				</button>
+      </div>
+      <div class="col border align-content-center flex-wrap">
+        <div class="form-check">
+					<input class="form-check-input" type="radio" name="Rotation direction" id="Clockwise" checked>
+					<label class="form-check-label" for="Clockwise">По часовой</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="Rotation direction" id="Counterclockwise">
+					<label class="form-check-label" for="Counterclockwise">Против часовой</label>
+				</div>
       </div>
       <div class="col border">
         <div class="p-3">
-          <label for="pumpSpeedRange" class="form-label">Скорость насоса</label>
-          <input type="range" class="form-range" value="500" min="50" max="1000" id="pumpSpeedRange">
-          <output for="pumpSpeedRange" id="pumpSpeedRangeValue" aria-hidden="true"></output>
+          <label for="pumpSpeedRange" class="form-label">Скорость насоса: </label>
+          <span><output for="pumpSpeedRange" id="pumpSpeedRangeValue" aria-hidden="true"></output></span>
+          <input type="range" class="form-range" value="500" min="50" max="2000" id="pumpSpeedRange">
         </div>
-      </div>
-      <div class="col border align-content-center flex-wrap">
-          <button type="button" class="btn btn-lg btn-outline-secondary" id="Tube status">Нет данных от датчика воды в трубке</button>
       </div>
     </div>
     <div class="row">
@@ -62,9 +78,9 @@
       </div>
       <div class="col border">
         <div class="p-3">
-          <label for="servoAngle" class="form-label">Угол для поворота</label>
+          <label for="servoAngle" class="form-label">Угол для поворота: </label>
+          <span><output for="servoAngle" id="servoAngleValue" aria-hidden="true"></output></span>
           <input type="range" class="form-range" value="15" min="-360" max="360" id="servoAngle">
-          <output for="servoAngle" id="servoAngleValue" aria-hidden="true"></output>
         </div>
       </div>
       <div class="col border align-content-center flex-wrap">

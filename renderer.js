@@ -1,9 +1,17 @@
-window.onload = function() {
-  window.resizeTo(800, 480);
-};
+window.onload = window.resizeTo(800, 480);
 
 const coolerBtn = document.getElementById('Cooler on/off');
+const coolerSpinner = document.getElementById('coolerSpinner');
+const coolerBtnSpan = document.getElementById('coolerText');
+coolerSpinner.style.display = 'none';
+
 const pumpButton = document.getElementById('Pump on/off');
+const pumpSpinner = document.getElementById('pumpSpinner');
+pumpSpinner.style.display = 'none';
+const pumpBtnSpan = document.getElementById('pumpText');
+const cwDirRadioElt = document.getElementById('Clockwise');
+const ccwDirRadioElt = document.getElementById('Counterclockwise');
+
 const servoButton = document.getElementById('Move servo');
 const servoStatus = document.getElementById('Servo status');
 
@@ -32,11 +40,13 @@ coolerBtn.addEventListener('click', async () => {
 	if (isCoolerOn) {
     coolerBtn.classList.remove('btn-success');
     coolerBtn.classList.add('btn-danger');
-    coolerBtn.innerText = "Выключить Пельтье";
+    coolerBtnSpan.innerText = "Выключить Пельтье";
+    coolerSpinner.removeAttribute("style");
   } else {
     coolerBtn.classList.remove('btn-danger');
     coolerBtn.classList.add('btn-success');
-    coolerBtn.innerText = "Включить Пельтье";
+    coolerBtnSpan.innerText = "Включить Пельтье";
+    coolerSpinner.style.display = 'none';
   };
 });
 
@@ -47,10 +57,15 @@ pumpButton.addEventListener('click', async () => {
   
   const speedToRequest = currentPumpSpeed > 0 ? 0 : speed;
   
+  const dirToRequest = cwDirRadioElt.checked ? 'CW' : 'CCW';
+  
   const response = await fetch('http://localhost:3000/api/managePump', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ speed: speedToRequest })
+    body: JSON.stringify({ 
+			speed: speedToRequest, 
+			direction: dirToRequest
+		})
 	});
 	const parsedResponse = await response.json();
 	console.log('Pump speed is', parsedResponse.data.speed, 'now');
@@ -58,13 +73,19 @@ pumpButton.addEventListener('click', async () => {
   if (isPumpOn) {
     pumpButton.classList.remove('btn-success');
     pumpButton.classList.add('btn-danger');
-    pumpButton.innerText = "Выключить насос";
+    pumpBtnSpan.innerText = "Выключить насос";
     pumpSpeedInput.disabled = true;
+    cwDirRadioElt.disabled = true;
+    ccwDirRadioElt.disabled = true;
+    pumpSpinner.removeAttribute("style");
   } else {
     pumpButton.classList.remove('btn-danger');
     pumpButton.classList.add('btn-success');
-    pumpButton.innerText = "Включить насос";
+    pumpBtnSpan.innerText = "Включить насос";
     pumpSpeedInput.disabled = false;
+    cwDirRadioElt.disabled = false;
+    ccwDirRadioElt.disabled = false;
+    pumpSpinner.style.display = 'none';
   };
 });
 
@@ -80,7 +101,7 @@ servoButton.addEventListener('click', async () => {
     body: JSON.stringify({ angle: angle })
 	});
 	const parsedResponse = await response.json();
-  servoStatus.innerText = "Текущая позиция сервопривода: " + parsedResponse.data.position + '⁰';
+	servoStatus.innerText = "Текущая позиция сервопривода: " + parsedResponse.data.position + '⁰';
 });
 
 servoAngleInput.addEventListener('input', () => {
@@ -122,6 +143,6 @@ const inquireTubeSensor = async () => {
   };
 };
 
-setInterval(inquireTempSensors, 1000);
+setInterval(inquireTempSensors, 2000);
 
 setInterval(inquireTubeSensor, 1000);
