@@ -12,7 +12,7 @@ const readTubeSensor = os.platform() === 'win32' ?
   async () => {
     const waterSensorPin = new Gpio.Gpio(539, 'in');
     const state = await waterSensorPin.read();
-		const consoleMsg = state === 1 ? 'The tube is empty' : 'The tube is full';
+		const consoleMsg = state === 1 ? 'empty' : 'full';
 		console.log('Water in the tube sensor state:', consoleMsg); 
     return state;  
   }

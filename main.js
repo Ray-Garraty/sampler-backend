@@ -14,6 +14,13 @@ app.use(express.json());
 let isCoolerOn = false;
 let pumpSpeed = 0;
 let servoPosition = 0;
+let temperatures = [-273, -273, -273];
+
+const tempInquirePeriod = 3000; // in ms
+const inquireTemperatures = async () => {
+  temperatures = await readTemperatures();
+};
+setInterval(inquireTemperatures, tempInquirePeriod);
 
 app.get('/coolerStatus', (req, res) => {
   res.send(isCoolerOn);
@@ -46,10 +53,8 @@ app.post('/api/manageServo', (req, res) => {
   res.json({ message: 'New servo position is', data: { position: servoPosition } });
 });
 
-app.get('/temperatures', async (req, res) => {
-  const temperatures = await readTemperatures();
-  // console.log({ temperatures });
-  res.send(Object.values(temperatures) || [-273, -273, -273]);
+app.get('/temperatures', (req, res) => {
+  res.send(Object.values(temperatures));
 });
 
 app.get('/tubeSensorStatus', async (req, res) => {

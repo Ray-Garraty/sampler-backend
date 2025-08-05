@@ -1,0 +1,1 @@
+chromium "/home/vlabe/Desktop/sampler/index.html" --window-size=800,480 --user-data-dir=$(mktemp -d)

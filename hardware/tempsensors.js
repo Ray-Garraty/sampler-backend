@@ -1,7 +1,7 @@
 import os from 'node:os';
 import sensor from 'ds18x20';
 
-const sensorsIDs = ['28-00000053e471', '28-8b96451f64ff', '28-8b96451f64ff'];
+// const sensorsIDs = ['28-00000053e471', '28-8b96451f64ff', '28-8b96451f64ff'];
 
 const readTemperatures = os.platform() === 'win32' ? 
   () => {

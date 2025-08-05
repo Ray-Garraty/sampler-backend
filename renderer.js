@@ -143,6 +143,6 @@ const inquireTubeSensor = async () => {
   };
 };
 
-setInterval(inquireTempSensors, 2000);
+setInterval(inquireTempSensors, 1000);
 
-setInterval(inquireTubeSensor, 1000);
+setInterval(inquireTubeSensor, 500);

@@ -17,9 +17,16 @@
   "dependencies": {
     "bootstrap": "^5.3.7",
     "cors": "^2.8.5",
-    "ds18x20": "^0.2.0",
+    "ds18x20": "0.2.0",
     "express": "^5.1.0",
+    "modbus-serial": "8.0.20",
     "onoff": "^6.0.3",
-    "raspi-soft-pwm": "^6.0.2"
+    "raspi-soft-pwm": "^6.0.2",
+    "serialport": "^13.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "eslint": "^9.32.0",
+    "globals": "^16.3.0"
   }
 }
