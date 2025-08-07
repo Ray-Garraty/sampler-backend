@@ -17,8 +17,10 @@
   "dependencies": {
     "bootstrap": "^5.3.7",
     "cors": "^2.8.5",
+    "ds18b20-raspi": "^0.3.6",
     "ds18x20": "0.2.0",
     "express": "^5.1.0",
+    "jsmodbus": "^4.0.10",
     "modbus-serial": "8.0.20",
     "onoff": "^6.0.3",
     "raspi-soft-pwm": "^6.0.2",

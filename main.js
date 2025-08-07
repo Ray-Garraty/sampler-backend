@@ -1,7 +1,10 @@
+'use strict'
+
 import cors from 'cors';
 import express from 'express';
 import managePump from './hardware/pump.js';
 import toggleCooler from './hardware/cooler.js';
+import modbusServerLaunch from './communication/jsmodbus-server.js';
 import readTubeSensor from './hardware/tubesensors.js';
 import readTemperatures from './hardware/tempsensors.js';
 
@@ -15,12 +18,21 @@ let isCoolerOn = false;
 let pumpSpeed = 0;
 let servoPosition = 0;
 let temperatures = [-273, -273, -273];
+let isTubeEmpty = true;
 
-const tempInquirePeriod = 3000; // in ms
+const tempInquirePeriod = 5000; // in ms
 const inquireTemperatures = async () => {
   temperatures = await readTemperatures();
 };
 setInterval(inquireTemperatures, tempInquirePeriod);
+
+const tubeSensorInquirePeriod = 1000; // in ms
+const inquireTubeSensor = async () => {
+  isTubeEmpty = await readTubeSensor();
+};
+setInterval(inquireTubeSensor, tubeSensorInquirePeriod);
+
+modbusServerLaunch();
 
 app.get('/coolerStatus', (req, res) => {
   res.send(isCoolerOn);
@@ -54,11 +66,10 @@ app.post('/api/manageServo', (req, res) => {
 });
 
 app.get('/temperatures', (req, res) => {
-  res.send(Object.values(temperatures));
+  res.send(temperatures);
 });
 
 app.get('/tubeSensorStatus', async (req, res) => {
-  const isTubeEmpty = await readTubeSensor();
   res.send(isTubeEmpty);
 });
 
