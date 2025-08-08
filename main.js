@@ -2,14 +2,18 @@
 
 import cors from 'cors';
 import express from 'express';
+import readRtc from './hardware/rtc.js';
 import managePump from './hardware/pump.js';
 import toggleCooler from './hardware/cooler.js';
-import modbusServerLaunch from './communication/jsmodbus-server.js';
 import readTubeSensor from './hardware/tubesensors.js';
 import readTemperatures from './hardware/tempsensors.js';
+import modbusServerLaunch from './communication/jsmodbus-server.js';
 
 const app = express();
 const port = 3000;
+const tempInquirePeriod = 3000; // in ms
+const tubeSensorInquirePeriod = 1000;
+const rtcInquirePeriod = 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -17,22 +21,34 @@ app.use(express.json());
 let isCoolerOn = false;
 let pumpSpeed = 0;
 let servoPosition = 0;
-let temperatures = [-273, -273, -273];
+let temperatures = [null, null, null];
 let isTubeEmpty = true;
+let caseTemperature = null;
+let dateTime = null;
 
-const tempInquirePeriod = 5000; // in ms
+modbusServerLaunch();
+
 const inquireTemperatures = async () => {
-  temperatures = await readTemperatures();
+  temperatures = await Promise.all(readTemperatures());
 };
 setInterval(inquireTemperatures, tempInquirePeriod);
 
-const tubeSensorInquirePeriod = 1000; // in ms
 const inquireTubeSensor = async () => {
   isTubeEmpty = await readTubeSensor();
 };
 setInterval(inquireTubeSensor, tubeSensorInquirePeriod);
 
-modbusServerLaunch();
+const inquireRtc = async () => {
+  try {
+    const rtcData = await Promise.all(readRtc());
+    dateTime = rtcData[0];
+    caseTemperature = rtcData[1];
+  }
+  catch (err) {
+    console.error(err);
+  }
+};
+setInterval(inquireRtc, rtcInquirePeriod);
 
 app.get('/coolerStatus', (req, res) => {
   res.send(isCoolerOn);
@@ -67,6 +83,14 @@ app.post('/api/manageServo', (req, res) => {
 
 app.get('/temperatures', (req, res) => {
   res.send(temperatures);
+});
+
+app.get('/caseTemperature', (req, res) => {
+  res.send(caseTemperature);
+});
+
+app.get('/dateTime', (req, res) => {
+  res.send(dateTime);
 });
 
 app.get('/tubeSensorStatus', async (req, res) => {

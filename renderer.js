@@ -1,4 +1,4 @@
-window.onload = window.resizeTo(800, 480);
+'use strict'
 
 const coolerBtn = document.getElementById('Cooler on/off');
 const coolerSpinner = document.getElementById('coolerSpinner');
@@ -32,12 +32,19 @@ const tempFields = [t1Field, t2Field, t3Field];
 
 const tubeSensorField = document.getElementById('Tube status');
 
-coolerBtn.addEventListener('click', async () => {  
-  const toggleResponse = await fetch('http://localhost:3000/toggleCooler');
-  const isCoolerOn = await toggleResponse.json();
-  console.log('Cooler state now is:', isCoolerOn);
-  
-	if (isCoolerOn) {
+const caseTempField = document.getElementById('Case temperature');
+
+const dateTimeField = document.getElementById('Date & Time');
+
+const inquireCoolerStatus = async () => {
+  const response = await fetch('http://localhost:3000/coolerStatus');
+  const isCoolerOn = await response.json();
+  console.log({isCoolerOn});
+  return isCoolerOn;
+};
+
+const setCoolerBtnStyle = (isOn) => {
+  if (isOn) {
     coolerBtn.classList.remove('btn-success');
     coolerBtn.classList.add('btn-danger');
     coolerBtnSpan.innerText = "Выключить Пельтье";
@@ -48,6 +55,27 @@ coolerBtn.addEventListener('click', async () => {
     coolerBtnSpan.innerText = "Включить Пельтье";
     coolerSpinner.style.display = 'none';
   };
+};
+
+const fetchCoolerStatusAndUpdateBtn = () => {
+    inquireCoolerStatus()
+      .then(isOn => {
+        coolerBtn.disabled = false;
+        setCoolerBtnStyle(isOn);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+};
+
+coolerBtn.addEventListener('click', async () => {  
+  try {
+    const response = await fetch('http://localhost:3000/toggleCooler');
+    const isCoolerOn = await response.json();
+    setCoolerBtnStyle(isCoolerOn);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 pumpButton.addEventListener('click', async () => {
@@ -112,7 +140,7 @@ servoAngleInput.addEventListener('input', () => {
 const inquireTempSensors = async () => {
   const temperaturesResponse = await fetch('http://localhost:3000/temperatures');
   const temps = await temperaturesResponse.json();
-  if (temps[0] === -273) {
+  if (temps.every(element => element === null)) {
 		console.log('No response from temperature sensors...');
 	} else {
 		console.log('Current temperatures:', temps);
@@ -131,7 +159,7 @@ const inquireTempSensors = async () => {
 const inquireTubeSensor = async () => {
   const tubeSensorResponse = await fetch('http://localhost:3000/tubeSensorStatus');
   const isTubeEmpty = await tubeSensorResponse.json();
-  console.log('Пустая ли трубка с водой?', isTubeEmpty);
+  console.log({isTubeEmpty});
   if (isTubeEmpty) {
     tubeSensorField.classList.remove(...tubeSensorField.classList);
     tubeSensorField.classList.add('btn', 'btn-lg', 'btn-outline-danger');
@@ -143,6 +171,34 @@ const inquireTubeSensor = async () => {
   };
 };
 
+const inquireCaseTemperature = async () => {
+  const caseTempResponse = await fetch('http://localhost:3000/caseTemperature');
+  const caseTemp = await caseTempResponse.json();
+  console.log({caseTemp});
+  if (caseTemp > 35) {
+    caseTempField.classList.remove(...tubeSensorField.classList);
+		caseTempField.classList.add('btn', 'btn-lg', 'btn-outline-danger');
+	} else {
+    caseTempField.classList.remove(...tubeSensorField.classList);
+		caseTempField.classList.add('btn', 'btn-lg', 'btn-outline-success');
+	};
+  caseTempField.innerText = caseTemp ? `t контроллера: ${caseTemp}⁰C` : 'Проверьте датчик температуры контроллера';
+};
+
+const inquireDateTime = async () => {
+  const dateTimeResponse = await fetch('http://localhost:3000/dateTime');
+  const dateTime = await dateTimeResponse.json();
+  console.log({dateTime});
+  dateTimeField.innerText = dateTime ? (new Date(dateTime)).toLocaleString('ru-RU') : 'Нет связи с модулем часов реального времени';
+};
+
+fetchCoolerStatusAndUpdateBtn();
+
+
 setInterval(inquireTempSensors, 1000);
 
 setInterval(inquireTubeSensor, 500);
+
+setInterval(inquireCaseTemperature, 10000);
+
+setInterval(inquireDateTime, 10000);

@@ -1,5 +1,5 @@
 import os from 'node:os';
-import sensor from 'ds18b20-raspi';
+import sensor from 'ds18x20';
 
 console.log('\nChecking temperature sensors...');
 const sensorsIDs = sensor.list();
@@ -20,7 +20,7 @@ const readTemperatures = os.platform() === 'win32' ?
     }
     const tempPromises = sensorsIDs.map((sensorId) => {
       return new Promise((resolve, reject) => {
-          sensor.readC(sensorId, 1, (error, data) => {
+          sensor.get(sensorId, (error, data) => {
             if (error) {
               console.error(error);
               reject(error);
@@ -31,20 +31,8 @@ const readTemperatures = os.platform() === 'win32' ?
           });       
 	    })
     });
-    return Promise.all(tempPromises);
-  }  
-
-/* () => new Promise((resolve, reject) => {
-		sensor.getAll((error, data) => {
-      if (error) {
-				console.error(error);
-        reject(error);
-      } else {
-				console.log('Raw temp sensors data:', data);
-        resolve(data);
-      }
-    });
-	}) */
+    return tempPromises;
+  }
 ;
 
 export default readTemperatures;

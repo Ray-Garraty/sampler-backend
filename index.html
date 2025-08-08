@@ -18,16 +18,31 @@
     
   <div class="container-fluid text-center">
     <div class="row">
+      <div class="col border col border align-content-center flex-wrap">
+        <div class="p-3">
+          <h5 class="card-title" id="Date & Time"></h5>
+        </div>
+      </div>
+      <div class="col border align-content-center flex-wrap">
+        <div class="p-3">
+          <button type="button" class="btn btn-lg btn-outline-secondary" id="Tube status">Опрос датчика воды...</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
       <div class="col border align-content-center flex-wrap">
         <div class="p-3">
 					<button type="button" class="btn btn-lg btn-success" id="Cooler on/off">
 						<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" id="coolerSpinner"></span></span>
-						<span id="coolerText">Включить Пельтье</span>
+						<span id="coolerText">Опрос Пельтье...</span>
 					</button>
 				</div>
       </div>
       <div class="col border align-content-center flex-wrap">
-        <button type="button" class="btn btn-lg btn-outline-secondary" id="Tube status">Нет данных от датчика воды в трубке</button>
+        <button type="button" class="btn btn-lg btn-outline-secondary" id="Case temperature">t контроллера: ...</button>
+      </div>
+      <div class="col border align-content-center flex-wrap">
+        <button type="button" class="btn btn-lg btn-outline-secondary" id="CPU temperature">t ЦП: ...</button>
       </div>
     </div>
     <div class="row">
@@ -49,9 +64,9 @@
     </div>
     <div class="row">
       <div class="col border align-content-center flex-wrap">
-        <button type="button" class="btn btn-success btn-lg" id="Pump on/off">
+        <button type="button" class="btn btn-success btn-lg" id="Pump on/off" disabled>
 					<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="pumpSpinner"></span>
-					<span id="pumpText">Включить насос</span>
+					<span id="pumpText">Опрос насоса...</span>
 				</button>
       </div>
       <div class="col border align-content-center flex-wrap">

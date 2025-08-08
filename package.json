@@ -15,6 +15,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@nanomatic/ds3231": "^3.0.2",
     "bootstrap": "^5.3.7",
     "cors": "^2.8.5",
     "ds18b20-raspi": "^0.3.6",
