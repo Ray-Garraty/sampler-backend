@@ -20,6 +20,7 @@ app.use(express.json());
 
 let isCoolerOn = false;
 let pumpSpeed = 0;
+let pumpDir = 'CW';
 let servoPosition = 0;
 let temperatures = [null, null, null];
 let isTubeEmpty = true;
@@ -62,19 +63,20 @@ app.get('/toggleCooler',  (req, res) => {
 });
 
 app.get('/pumpStatus', (req, res) => {
-  res.send(pumpSpeed);
+  res.send([pumpSpeed, pumpDir]);
 });
 
-app.post('/api/managePump', (req, res) => {
+app.post('/managePump', (req, res) => {
   const requestedSpeed = req.body.speed;
   const requestedDirection = req.body.direction;
   console.log('Received manage pump request with speed:', requestedSpeed, 'and dir:', requestedDirection);
   managePump(requestedSpeed, requestedDirection);
   pumpSpeed = requestedSpeed;
-  res.json({ message: 'New pump speed is', data: { speed: pumpSpeed } });
+  pumpDir = requestedDirection;
+  res.json({ message: 'New pump speed is', data: { speed: pumpSpeed, dir: pumpDir } });
 });
 
-app.post('/api/manageServo', (req, res) => {
+app.post('/manageServo', (req, res) => {
   const requestedAngle = req.body.angle;
   console.log('Received servo rotate request with angle:', requestedAngle);
   servoPosition += requestedAngle;
