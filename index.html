@@ -71,11 +71,11 @@
       </div>
       <div class="col border align-content-center flex-wrap">
         <div class="form-check">
-					<input class="form-check-input" type="radio" name="Rotation direction" id="Clockwise" checked>
+					<input class="form-check-input" type="radio" name="Rotation direction" id="Clockwise" disabled>
 					<label class="form-check-label" for="Clockwise">По часовой</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="radio" name="Rotation direction" id="Counterclockwise">
+					<input class="form-check-input" type="radio" name="Rotation direction" id="Counterclockwise" disabled>
 					<label class="form-check-label" for="Counterclockwise">Против часовой</label>
 				</div>
       </div>
@@ -83,7 +83,7 @@
         <div class="p-3">
           <label for="pumpSpeedRange" class="form-label">Скорость насоса: </label>
           <span><output for="pumpSpeedRange" id="pumpSpeedRangeValue" aria-hidden="true"></output></span>
-          <input type="range" class="form-range" value="500" min="50" max="2000" id="pumpSpeedRange">
+          <input type="range" class="form-range" value="500" min="50" max="2000" id="pumpSpeedRange" disabled>
         </div>
       </div>
     </div>
@@ -104,6 +104,6 @@
     </div>
 </div>
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-    <script src="./renderer.js"></script>
+    <script src="./frontend/renderer.js"></script>
   </body>
 </html>
