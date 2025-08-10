@@ -25,7 +25,7 @@ const t3Field = document.getElementById('T3');
 export const chamberTempFields = [t1Field, t2Field, t3Field];
 
 export const tubeSensorField = document.getElementById('Tube status');
-
 export const rtcTempField = document.getElementById('Case temperature');
-
 export const dateTimeField = document.getElementById('Date & Time');
+export const cpuTempElt = document.getElementById('CPU temperature');
+export const modbusStatusField = document.getElementById('Modbus status');

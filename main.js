@@ -5,18 +5,20 @@ import express from 'express';
 import readRtc from './hardware/rtc.js';
 import managePump from './hardware/pump.js';
 import toggleCooler from './hardware/cooler.js';
+import readCpuTemp from './hardware/cpu_temp.js';
 import readTubeSensor from './hardware/tubesensors.js';
 import readTemperatures from './hardware/tempsensors.js';
 import modbusServerLaunch from './communication/jsmodbus-server.js';
 
 const app = express();
 const port = 3000;
+app.use(cors());
+app.use(express.json());
+
 const tempInquirePeriod = 3000; // in ms
 const tubeSensorInquirePeriod = 1000;
 const rtcInquirePeriod = 5000;
-
-app.use(cors());
-app.use(express.json());
+const cpuTempInquirePeriod = 5000;
 
 let isCoolerOn = false;
 let pumpSpeed = 0;
@@ -26,8 +28,18 @@ let temperatures = [null, null, null];
 let isTubeEmpty = true;
 let caseTemperature = null;
 let dateTime = null;
+let cpuTemperature = null;
+let isModBusOK = null;
 
-modbusServerLaunch();
+modbusServerLaunch()
+  .then(() => { 
+    isModBusOK = true;
+    console.log('\nSuccessfully connected to the Serial Port');
+  })
+  .catch(() => {
+    isModBusOK = false;
+    console.error('\n---Could not connect to the Serial Port!---\n');
+  });
 
 const inquireTemperatures = async () => {
   temperatures = await Promise.all(readTemperatures());
@@ -51,6 +63,11 @@ const inquireRtc = async () => {
 };
 setInterval(inquireRtc, rtcInquirePeriod);
 
+const inquireCpuTemp = async () => {
+  cpuTemperature = await readCpuTemp();
+};
+setInterval(inquireCpuTemp, cpuTempInquirePeriod);
+
 app.get('/coolerStatus', (req, res) => {
   res.send(isCoolerOn);
 });
@@ -69,7 +86,7 @@ app.get('/pumpStatus', (req, res) => {
 app.post('/managePump', (req, res) => {
   const requestedSpeed = req.body.speed;
   const requestedDirection = req.body.direction;
-  console.log('Received manage pump request with speed:', requestedSpeed, 'and dir:', requestedDirection);
+  console.log('\nReceived manage pump request with speed:', requestedSpeed, 'and dir:', requestedDirection, '\n');
   managePump(requestedSpeed, requestedDirection);
   pumpSpeed = requestedSpeed;
   pumpDir = requestedDirection;
@@ -91,14 +108,22 @@ app.get('/caseTemperature', (req, res) => {
   res.send(caseTemperature);
 });
 
+app.get('/cpuTemperature', (req, res) => {
+  res.send(cpuTemperature);
+});
+
 app.get('/dateTime', (req, res) => {
   res.send(dateTime);
 });
 
-app.get('/tubeSensorStatus', async (req, res) => {
+app.get('/tubeSensorStatus', (req, res) => {
   res.send(isTubeEmpty);
 });
 
+app.get('/modbusStatus', (req, res) => {
+  res.send(isModBusOK);
+});
+
 app.listen(port, () => {
-  console.log(`\nServer listening at http://localhost:${port}`);
+  console.log(`\nBackend is listening at http://localhost:${port}`);
 });

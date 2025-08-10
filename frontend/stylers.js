@@ -56,6 +56,10 @@ export const setTubeSensorFieldStyle = (element, isEmpty) => {
   element.innerText = isEmpty ? 'Трубка пустая' : 'В трубке есть вода';
 };
 
+export const setDateTimeEltStyle = (element, dateTime) => {
+  element.innerText = (new Date(dateTime)).toLocaleString('ru-RU');
+};
+
 export const setRtcTempEltStyle = (element, t, threshold) => {
   element.classList.remove(...element.classList);
   element.classList.add('btn', 'btn-lg');
@@ -64,6 +68,16 @@ export const setRtcTempEltStyle = (element, t, threshold) => {
   element.innerText = `t контроллера: ${t}⁰C`;
 };
 
-export const setDateTimeEltStyle = (element, dateTime) => {
-  element.innerText = (new Date(dateTime)).toLocaleString('ru-RU');
+export const setCpuTempBtnStyle = (element, t, threshold) => {
+  element.classList.remove(...element.classList);
+  element.classList.add('btn', 'btn-lg');
+  const outlineClass = t > threshold ? 'btn-outline-danger' : 'btn-outline-success';
+  element.classList.add(outlineClass);
+  element.innerText = `t ЦП: ${t}⁰C`;
+};
+
+export const setModbusFieldStyle = (element, isReady) => {
+  const colorClass = isReady ? 'text-success' : 'text-danger';
+  element.classList.add(colorClass);
+  element.innerText = isReady ? 'Готов к приёму команд по MODBUS' : 'Ошибка USB-RS485 конвертера';
 };

@@ -7,6 +7,8 @@ import {
   setTubeSensorFieldStyle,
   setRtcTempEltStyle,
   setDateTimeEltStyle,
+  setCpuTempBtnStyle,
+  setModbusFieldStyle,
 } from './frontend/stylers.js';
 
 import {
@@ -28,14 +30,18 @@ import {
   tubeSensorField,
   rtcTempField,
   dateTimeField,
+  cpuTempElt,
+  modbusStatusField,
 } from './frontend/elements.js';
 
 const hostAddress = 'http://localhost:3000/';
 const chambTempWarnThreshold = 4.5;
 const rtcTempWarnThreshold = 35;
+const cpuTempThreshold = 75;
 const chamberTempsUpdatePeriod = 3000;
 const tubeSensorUpdatePeriod = 1000;
 const rtcDataUpdatePeriod = 10000;
+const cpuTempUpdatePeriod = 5000;
 
 const fetchChamberTempsAndUpdElts = async () => {
   const temperaturesResponse = await fetch(hostAddress + 'temperatures');
@@ -64,6 +70,13 @@ const fetchPumpStatus = async () => {
   return pumpSpdAndDir;
 };
 
+const fetchModbusStatus = async () => {
+  const response = await fetch(hostAddress + 'modbusStatus');
+  const isModbusReady = await response.json();
+  console.log(isModbusReady);
+  return isModbusReady;
+};
+
 fetchCoolerStatus()
   .then(isOn => {
     coolerBtn.disabled = false;
@@ -80,6 +93,12 @@ fetchPumpStatus()
     console.error(err);
   });
 
+fetchModbusStatus()
+  .then(isReady => {
+    setModbusFieldStyle(modbusStatusField, isReady);
+  }).catch(err => {
+    console.error(err);
+  });
 
 let speed = Number(pumpSpeedInput.textContent || pumpSpeedInput.value);
 pumpSpeedOutput.textContent = speed;
@@ -109,6 +128,13 @@ const fetchDateTimeAndUpdElt = async () => {
   const dateTime = await dateTimeResponse.json();
   console.log({dateTime});
   setDateTimeEltStyle(dateTimeField, dateTime);
+};
+
+const fetchCpuTempAndUpdElt = async () => {
+  const response = await fetch(hostAddress + 'cpuTemperature');
+  const cpuT = await response.json();
+  console.log({cpuT});
+  setCpuTempBtnStyle(cpuTempElt, cpuT, cpuTempThreshold);
 };
 
 coolerBtn.addEventListener('click', async () => {  
@@ -169,3 +195,5 @@ setInterval(fetchTubeSensorAndUpdElt, tubeSensorUpdatePeriod);
 setInterval(fetchRtcTempAndUpdElt, rtcDataUpdatePeriod);
 
 setInterval(fetchDateTimeAndUpdElt, rtcDataUpdatePeriod);
+
+setInterval(fetchCpuTempAndUpdElt, cpuTempUpdatePeriod);
