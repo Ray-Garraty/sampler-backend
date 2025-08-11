@@ -31,6 +31,10 @@ let dateTime = null;
 let cpuTemperature = null;
 let isModBusOK = null;
 
+app.listen(port, () => {
+  console.log(`\nBackend is listening at http://localhost:${port}\n`);
+});
+
 modbusServerLaunch()
   .then(() => { 
     isModBusOK = true;
@@ -83,21 +87,8 @@ app.get('/pumpStatus', (req, res) => {
   res.send([pumpSpeed, pumpDir]);
 });
 
-app.post('/managePump', (req, res) => {
-  const requestedSpeed = req.body.speed;
-  const requestedDirection = req.body.direction;
-  console.log('\nReceived manage pump request with speed:', requestedSpeed, 'and dir:', requestedDirection, '\n');
-  managePump(requestedSpeed, requestedDirection);
-  pumpSpeed = requestedSpeed;
-  pumpDir = requestedDirection;
-  res.json({ message: 'New pump speed is', data: { speed: pumpSpeed, dir: pumpDir } });
-});
-
-app.post('/manageServo', (req, res) => {
-  const requestedAngle = req.body.angle;
-  console.log('Received servo rotate request with angle:', requestedAngle);
-  servoPosition += requestedAngle;
-  res.json({ message: 'New servo position is', data: { position: servoPosition } });
+app.get('/servoStatus', (req, res) => {
+  res.send(servoPosition);
 });
 
 app.get('/temperatures', (req, res) => {
@@ -124,6 +115,19 @@ app.get('/modbusStatus', (req, res) => {
   res.send(isModBusOK);
 });
 
-app.listen(port, () => {
-  console.log(`\nBackend is listening at http://localhost:${port}`);
+app.post('/managePump', (req, res) => {
+  const requestedSpeed = req.body.speed;
+  const requestedDirection = req.body.direction;
+  console.log('\nReceived manage pump request with speed:', requestedSpeed, 'and dir:', requestedDirection, '\n');
+  managePump(requestedSpeed, requestedDirection);
+  pumpSpeed = requestedSpeed;
+  pumpDir = requestedDirection;
+  res.json({ message: 'New pump speed is', data: { speed: pumpSpeed, dir: pumpDir } });
+});
+
+app.post('/manageServo', (req, res) => {
+  const requestedAngle = req.body.angle;
+  console.log('Received servo rotate request with angle:', requestedAngle);
+  servoPosition += requestedAngle;
+  res.json({ message: 'New servo position is', data: { position: servoPosition } });
 });

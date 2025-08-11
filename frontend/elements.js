@@ -10,12 +10,11 @@ export const pumpBtnSpan = document.getElementById('pumpText');
 export const cwDirRadioElt = document.getElementById('Clockwise');
 export const ccwDirRadioElt = document.getElementById('Counterclockwise');
 
-export const servoButton = document.getElementById('Move servo');
-export const servoStatusElt = document.getElementById('Servo status');
-
 export const pumpSpeedInput = document.getElementById('pumpSpeedRange');
 export const pumpSpeedOutput = document.getElementById('pumpSpeedRangeValue');
 
+export const servoButton = document.getElementById('Move servo');
+export const servoStatusElt = document.getElementById('Servo status');
 export const servoAngleInput = document.getElementById('servoAngle');
 export const servoAngleOutput = document.getElementById('servoAngleValue');
 

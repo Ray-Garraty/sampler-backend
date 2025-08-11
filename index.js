@@ -9,6 +9,7 @@ import {
   setDateTimeEltStyle,
   setCpuTempBtnStyle,
   setModbusFieldStyle,
+  setServoStatusEltStyle,
 } from './frontend/stylers.js';
 
 import {
@@ -20,10 +21,10 @@ import {
   pumpBtnSpan,
   cwDirRadioElt,
   ccwDirRadioElt,
-  servoButton,
-  servoStatusElt,
   pumpSpeedInput,
   pumpSpeedOutput,
+  servoButton,
+  servoStatusElt,
   servoAngleInput,
   servoAngleOutput,
   chamberTempFields,
@@ -77,6 +78,20 @@ const fetchModbusStatus = async () => {
   return isModbusReady;
 };
 
+const fetchServoStatusAndUpdElt = async () => {
+  const response = await fetch(hostAddress + 'servoStatus');
+  const servoAngle = await response.json();
+  console.log({servoAngle});
+  return servoAngle;
+};
+
+const fetchDateTimeAndUpdElt = async () => {
+  const dateTimeResponse = await fetch(hostAddress + 'dateTime');
+  const dateTime = await dateTimeResponse.json();
+  console.log({dateTime});
+  setDateTimeEltStyle(dateTimeField, dateTime);
+};
+
 fetchCoolerStatus()
   .then(isOn => {
     coolerBtn.disabled = false;
@@ -100,6 +115,15 @@ fetchModbusStatus()
     console.error(err);
   });
 
+fetchServoStatusAndUpdElt()
+  .then(angle => {
+    setServoStatusEltStyle(servoStatusElt, angle);
+  }).catch(err => {
+    console.error(err);
+  });
+
+fetchDateTimeAndUpdElt();
+
 let speed = Number(pumpSpeedInput.textContent || pumpSpeedInput.value);
 pumpSpeedOutput.textContent = speed;
 
@@ -121,13 +145,6 @@ const fetchRtcTempAndUpdElt = async () => {
   const rtcTemp = await response.json();
   console.log({rtcTemp});
   setRtcTempEltStyle(rtcTempField, rtcTemp, rtcTempWarnThreshold);
-};
-
-const fetchDateTimeAndUpdElt = async () => {
-  const dateTimeResponse = await fetch(hostAddress + 'dateTime');
-  const dateTime = await dateTimeResponse.json();
-  console.log({dateTime});
-  setDateTimeEltStyle(dateTimeField, dateTime);
 };
 
 const fetchCpuTempAndUpdElt = async () => {
@@ -180,7 +197,8 @@ servoButton.addEventListener('click', async () => {
     body: JSON.stringify({ angle: angle })
 	});
 	const parsedResponse = await response.json();
-	servoStatusElt.innerText = "Текущая позиция сервопривода: " + parsedResponse.data.position + '⁰';
+  const newPosition = parsedResponse.data.position;
+	setServoStatusEltStyle(servoStatusElt, newPosition);
 });
 
 servoAngleInput.addEventListener('input', () => {

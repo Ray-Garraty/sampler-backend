@@ -57,7 +57,9 @@ export const setTubeSensorFieldStyle = (element, isEmpty) => {
 };
 
 export const setDateTimeEltStyle = (element, dateTime) => {
-  element.innerText = (new Date(dateTime)).toLocaleString('ru-RU');
+  const dateTimeStringWithSec = (new Date(dateTime)).toLocaleString('ru-RU');
+  const dateTimeStringNoSec = dateTimeStringWithSec.slice(0, -3);
+  element.innerText = dateTimeStringNoSec;
 };
 
 export const setRtcTempEltStyle = (element, t, threshold) => {
@@ -80,4 +82,8 @@ export const setModbusFieldStyle = (element, isReady) => {
   const colorClass = isReady ? 'text-success' : 'text-danger';
   element.classList.add(colorClass);
   element.innerText = isReady ? 'Готов к приёму команд по MODBUS' : 'Ошибка USB-RS485 конвертера';
+};
+
+export const setServoStatusEltStyle = (element, angle) => {
+  element.innerText = "Текущая позиция сервопривода: " + angle + '⁰';
 };

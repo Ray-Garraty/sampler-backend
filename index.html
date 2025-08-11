@@ -18,13 +18,6 @@
     
   <div class="container-fluid text-center">
     <div class="row">
-      <div class="col border align-content-center flex-wrap">
-        <div class="p-3">
-          <h4 class="fw-bold text-warning">Сервисное меню</h5>
-        </div>
-      </div>
-    </div>
-    <div class="row">
       <div class="col border col border align-content-center flex-wrap">
         <div class="p-3">
           <h5 class="card-title" id="Date & Time"></h5>
@@ -75,6 +68,21 @@
       </div>
     </div>
     <div class="row">
+      <div class="col border col border align-content-center flex-wrap">
+        <button type="button" class="btn btn-lg btn-success" id="Move servo">Повернуть серво</button>
+      </div>
+      <div class="col border">
+        <div class="p-3">
+          <label for="servoAngle" class="form-label">Угол для поворота: </label>
+          <span><output for="servoAngle" id="servoAngleValue" aria-hidden="true"></output></span>
+          <input type="range" class="form-range" value="15" min="-360" max="360" id="servoAngle">
+        </div>
+      </div>
+      <div class="col border align-content-center flex-wrap">
+          <button type="button" class="btn btn-outline-primary" id="Servo status">Текущая позиция сервопривода: 0</button>
+      </div>
+    </div>
+    <div class="row">
       <div class="col border align-content-center flex-wrap">
         <button type="button" class="btn btn-secondary btn-lg" id="Pump on/off" disabled>
 					<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="pumpSpinner"></span>
@@ -100,18 +108,39 @@
       </div>
     </div>
     <div class="row">
-      <div class="col border col border align-content-center flex-wrap">
-        <button type="button" class="btn btn-lg btn-success" id="Move servo">Повернуть серво</button>
+      <div class="col border align-content-center flex-wrap">
+        <div class="form-check">
+					<input class="form-check-input" type="radio" name="Dosing mode" id="Continuous dosing" checked>
+					<label class="form-check-label" for="Continuous dosing">Непрерывное дозирование</label>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="radio" name="Dosing mode" id="Discrete dosing">
+					<label class="form-check-label" for="Discrete dosing">Дозирование порции</label>
+				</div>
+        <div class="form-check">
+					<input class="form-check-input" type="radio" name="Dosing mode" id="Dosing calibration">
+					<label class="form-check-label" for="Dosing calibration">Калибровка дозатора</label>
+				</div>
       </div>
-      <div class="col border">
+      <div class="col border align-content-center flex-wrap">
         <div class="p-3">
-          <label for="servoAngle" class="form-label">Угол для поворота: </label>
-          <span><output for="servoAngle" id="servoAngleValue" aria-hidden="true"></output></span>
-          <input type="range" class="form-range" value="15" min="-360" max="360" id="servoAngle">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Число импульсов</span>
+            </div>
+            <input type="number" class="form-control" id="pulsesCount" min="0" step="100" value="10000">
+          </div>
         </div>
       </div>
       <div class="col border align-content-center flex-wrap">
-          <button type="button" class="btn btn-outline-primary" id="Servo status">Текущая позиция сервопривода: 0</button>
+        <div class="p-3">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon2">Объём воды, мл</span>
+            </div>
+            <input type="number" class="form-control" id="volume" min="0" step="1" value="100">
+          </div>
+        </div>
       </div>
     </div>
 </div>
