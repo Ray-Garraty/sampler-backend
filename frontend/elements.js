@@ -1,17 +1,24 @@
 'use strict'
 
-export const coolerBtn = document.getElementById('Cooler on/off');
+export const coolerBtn = document.getElementById('Cooler on/off'); 
 export const coolerSpinner = document.getElementById('coolerSpinner');
 export const coolerBtnSpan = document.getElementById('coolerText');
 
 export const pumpButton = document.getElementById('Pump on/off');
 export const pumpSpinner = document.getElementById('pumpSpinner');
 export const pumpBtnSpan = document.getElementById('pumpText');
+export const pumpDirSelectGroup = document.getElementsByName('Rotation direction');
 export const cwDirRadioElt = document.getElementById('Clockwise');
 export const ccwDirRadioElt = document.getElementById('Counterclockwise');
 
 export const pumpSpeedInput = document.getElementById('pumpSpeedRange');
 export const pumpSpeedOutput = document.getElementById('pumpSpeedRangeValue');
+export const pumpContinuousModeInputElt = document.getElementById('Continuous dosing');
+export const pumpDiscreteModeInputElt = document.getElementById('Discrete dosing');
+export const pumpModeSelectGroup = document.getElementsByName('Dosing mode');
+export const pumpCalModeInputElt = document.getElementById('Pump calibration');
+export const stepsCountInputElt = document.getElementById('Steps count');
+export const volumeInputElt = document.getElementById('Volume');
 
 export const servoButton = document.getElementById('Move servo');
 export const servoStatusElt = document.getElementById('Servo status');

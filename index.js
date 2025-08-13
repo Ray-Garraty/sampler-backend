@@ -33,6 +33,11 @@ import {
   dateTimeField,
   cpuTempElt,
   modbusStatusField,
+  pumpContinuousModeInputElt,
+  pumpDiscreteModeInputElt,
+  pumpCalModeInputElt,
+  stepsCountInputElt,
+  volumeInputElt,
 } from './frontend/elements.js';
 
 const hostAddress = 'http://localhost:3000/';
@@ -103,14 +108,26 @@ fetchCoolerStatus()
 fetchPumpStatus()
   .then(([spd, dir]) => {
     pumpButton.disabled = false;
-    setPumpElementsStyle(pumpButton, pumpBtnSpan, pumpSpeedInput, cwDirRadioElt, ccwDirRadioElt, pumpSpinner, spd > 0, dir);
+    setPumpElementsStyle(
+      pumpButton,
+      pumpBtnSpan,
+      pumpSpeedInput,
+      cwDirRadioElt,
+      ccwDirRadioElt,
+      pumpSpinner,
+      spd > 0,
+      dir,
+      pumpContinuousModeInputElt,
+      pumpDiscreteModeInputElt,
+      pumpCalModeInputElt
+    );
   }).catch(err => {
     console.error(err);
   });
 
 fetchModbusStatus()
   .then(isReady => {
-    setModbusFieldStyle(modbusStatusField, isReady);
+    setModbusFieldStyle(modbusStatusField, isReady); 
   }).catch(err => {
     console.error(err);
   });
@@ -165,24 +182,63 @@ coolerBtn.addEventListener('click', async () => {
 });
 
 pumpButton.addEventListener('click', async () => {
+  pumpButton.disabled = true;
+  cwDirRadioElt.disabled = true;
+  ccwDirRadioElt.disabled = true;
+  pumpContinuousModeInputElt.disabled = true;
+  pumpDiscreteModeInputElt.disabled = true;
+  pumpCalModeInputElt.disabled = true;
+
   const resp = await fetch(hostAddress + 'pumpStatus');
   const [crntSpd] = await resp.json();
   const speedToRequest = crntSpd > 0 ? 0 : speed;
   const dirToRequest = cwDirRadioElt.checked ? 'CW' : 'CCW';
   
+  const determinePumpMode = (elements) => {
+    const [checkedElt] = elements.filter(elt => elt.checked);
+    return checkedElt.id;
+  };
+
+  const reqMode = determinePumpMode([pumpContinuousModeInputElt, pumpDiscreteModeInputElt, pumpCalModeInputElt]);
+  const reqStepsCount = stepsCountInputElt.valueAsNumber;
+  const reqVolume = volumeInputElt.valueAsNumber;
   const response = await fetch(hostAddress + 'managePump', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 
 			speed: speedToRequest, 
-			direction: dirToRequest
+			direction: dirToRequest,
+      mode: reqMode,
+      stepsCount: reqStepsCount,
+      volume: reqVolume,
 		})
 	});
 	const parsedResponse = await response.json();
+  console.table(parsedResponse.data);
 	console.log('Pump speed is', parsedResponse.data.speed, 'now');
 	const isPumpOn = parsedResponse.data.speed > 0;
-  const newDir = parsedResponse.data.dir;
-  setPumpElementsStyle(pumpButton, pumpBtnSpan, pumpSpeedInput, cwDirRadioElt, ccwDirRadioElt, pumpSpinner, isPumpOn, newDir);
+  const newDir = parsedResponse.data.direction;
+
+  pumpButton.disabled = false;
+  cwDirRadioElt.disabled = false;
+  ccwDirRadioElt.disabled = false;
+  pumpContinuousModeInputElt.disabled = false;
+  pumpDiscreteModeInputElt.disabled = false;
+  pumpCalModeInputElt.disabled = false;
+
+  setPumpElementsStyle(
+    pumpButton,
+    pumpBtnSpan,
+    pumpSpeedInput,
+    cwDirRadioElt,
+    ccwDirRadioElt,
+    pumpSpinner,
+    isPumpOn,
+    newDir,
+    pumpContinuousModeInputElt,
+    pumpDiscreteModeInputElt,
+    pumpCalModeInputElt
+  );
 });
 
 pumpSpeedInput.addEventListener('input', () => {
@@ -206,12 +262,12 @@ servoAngleInput.addEventListener('input', () => {
   angle = servoAngleInput.valueAsNumber;
 });
 
-setInterval(fetchChamberTempsAndUpdElts, chamberTempsUpdatePeriod);
+// setInterval(fetchChamberTempsAndUpdElts, chamberTempsUpdatePeriod);
 
-setInterval(fetchTubeSensorAndUpdElt, tubeSensorUpdatePeriod);
+// setInterval(fetchTubeSensorAndUpdElt, tubeSensorUpdatePeriod);
 
-setInterval(fetchRtcTempAndUpdElt, rtcDataUpdatePeriod);
+// setInterval(fetchRtcTempAndUpdElt, rtcDataUpdatePeriod);
 
-setInterval(fetchDateTimeAndUpdElt, rtcDataUpdatePeriod);
+// setInterval(fetchDateTimeAndUpdElt, rtcDataUpdatePeriod);
 
-setInterval(fetchCpuTempAndUpdElt, cpuTempUpdatePeriod);
+// setInterval(fetchCpuTempAndUpdElt, cpuTempUpdatePeriod);

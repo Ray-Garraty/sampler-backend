@@ -118,17 +118,17 @@
 					<label class="form-check-label" for="Discrete dosing">Дозирование порции</label>
 				</div>
         <div class="form-check">
-					<input class="form-check-input" type="radio" name="Dosing mode" id="Dosing calibration">
-					<label class="form-check-label" for="Dosing calibration">Калибровка дозатора</label>
+					<input class="form-check-input" type="radio" name="Dosing mode" id="Pump calibration">
+					<label class="form-check-label" for="Pump calibration">Калибровка дозатора</label>
 				</div>
       </div>
       <div class="col border align-content-center flex-wrap">
         <div class="p-3">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">Число импульсов</span>
+              <span class="input-group-text" id="basic-addon1">Число шагов</span>
             </div>
-            <input type="number" class="form-control" id="pulsesCount" min="0" step="100" value="10000">
+            <input type="number" class="form-control" id="Steps count" min="0" step="100000" value="10000000">
           </div>
         </div>
       </div>
@@ -138,7 +138,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon2">Объём воды, мл</span>
             </div>
-            <input type="number" class="form-control" id="volume" min="0" step="1" value="100">
+            <input type="number" class="form-control" id="Volume" min="0" step="1" value="100">
           </div>
         </div>
       </div>

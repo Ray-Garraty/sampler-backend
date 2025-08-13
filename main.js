@@ -2,6 +2,7 @@
 
 import cors from 'cors';
 import express from 'express';
+import process from 'process';
 import readRtc from './hardware/rtc.js';
 import managePump from './hardware/pump.js';
 import toggleCooler from './hardware/cooler.js';
@@ -21,8 +22,11 @@ const rtcInquirePeriod = 5000;
 const cpuTempInquirePeriod = 5000;
 
 let isCoolerOn = false;
+
 let pumpSpeed = 0;
 let pumpDir = 'CW';
+let pumpMode = 'Continuous dosing';
+
 let servoPosition = 0;
 let temperatures = [null, null, null];
 let isTubeEmpty = true;
@@ -46,7 +50,11 @@ modbusServerLaunch()
   });
 
 const inquireTemperatures = async () => {
-  temperatures = await Promise.all(readTemperatures());
+  try {
+    temperatures = await Promise.all(readTemperatures());
+  } catch (err) {
+    console.error(err);
+  }
 };
 setInterval(inquireTemperatures, tempInquirePeriod);
 
@@ -115,14 +123,22 @@ app.get('/modbusStatus', (req, res) => {
   res.send(isModBusOK);
 });
 
-app.post('/managePump', (req, res) => {
-  const requestedSpeed = req.body.speed;
-  const requestedDirection = req.body.direction;
-  console.log('\nReceived manage pump request with speed:', requestedSpeed, 'and dir:', requestedDirection, '\n');
-  managePump(requestedSpeed, requestedDirection);
-  pumpSpeed = requestedSpeed;
-  pumpDir = requestedDirection;
-  res.json({ message: 'New pump speed is', data: { speed: pumpSpeed, dir: pumpDir } });
+app.post('/managePump', async (req, res) => {
+  console.log('\nReceived manage pump request:');
+  console.table(req.body);
+  console.log();
+
+  const { speed, direction, mode, stepsCount, volume } = req.body;
+  managePump(speed, direction, mode, stepsCount, volume)
+    .then(newSpeed => {
+      pumpSpeed = newSpeed;
+      pumpDir = direction;
+      pumpMode = mode;
+      res.json({ message: 'New pump settings:', data: { speed: pumpSpeed, direction, mode } });
+    })
+    .catch(err => {
+      console.error(err);
+    })
 });
 
 app.post('/manageServo', (req, res) => {
@@ -130,4 +146,13 @@ app.post('/manageServo', (req, res) => {
   console.log('Received servo rotate request with angle:', requestedAngle);
   servoPosition += requestedAngle;
   res.json({ message: 'New servo position is', data: { position: servoPosition } });
+});
+
+process.on('uncaughtException', (err, origin) => {
+  console.error(`Uncaught Exception: ${err.message}`);
+  console.log('Error source:', origin);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);    
 });

@@ -13,10 +13,22 @@ export const setCoolerBtnStyle = (button, textSpan, spinner, isOn) => {
   };
 };
 
-export const setPumpElementsStyle = (button, textSpan, speedInput, cwDirRadioElt, ccwDirRadioElt, spinner, isOn, dir) => {
-  speedInput.disabled = isOn;
-  cwDirRadioElt.disabled = isOn;
-  ccwDirRadioElt.disabled = isOn;
+export const setPumpElementsStyle = (
+  button,
+  textSpan,
+  speedInput,
+  cwDirRadioElt,
+  ccwDirRadioElt,
+  spinner,
+  isOn,
+  dir,
+  contModeInput,
+  discrModeInput,
+  calModeInput,
+) => {
+  [speedInput, cwDirRadioElt, ccwDirRadioElt, contModeInput, discrModeInput, calModeInput].forEach((element) => {
+    element.disabled = isOn;
+  });
   if (dir === 'CW') {
 		cwDirRadioElt.checked = true;
   } else {

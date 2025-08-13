@@ -1,20 +1,11 @@
-import os from 'node:os';
 import sensor from 'ds18x20';
 
 console.log('\nChecking temperature sensors...');
-const sensorsIDs = sensor.list();
+const sensorsIDs = (sensor.list()).filter(id => id.startsWith('28-'));
 // const sensorsIDs = ['28-00000053e471', '28-8b96451f64ff', '28-8b96451f64ff'];
 console.log({sensorsIDs});
 
-const readTemperatures = os.platform() === 'win32' ? 
-  () => {
-    const template = [3.5, 3.5, 3.5];
-    const temps = template.map((temp) => Math.round((temp + Math.random()) * 10) / 10);
-    console.log('Temperatures:', temps);
-    return temps;
-  }
-: 
-  () => {
+export default () => {
     if (sensorsIDs.length === 0) {
       return Promise.reject(console.warn('Please connect at least 1 temperature sensor and restart the app'));
     }
@@ -34,5 +25,3 @@ const readTemperatures = os.platform() === 'win32' ?
     return tempPromises;
   }
 ;
-
-export default readTemperatures;
