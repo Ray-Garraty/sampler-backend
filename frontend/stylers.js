@@ -34,7 +34,7 @@ export const setPumpElementsStyle = (
   } else {
 		ccwDirRadioElt.checked = true;
 	}
-	textSpan.innerText = isOn ? 'Выключить насос' : 'Включить насос';
+	textSpan.innerText = isOn ? 'Остановить дозирование' : 'Запустить дозирование';
   button.classList.remove(...button.classList);
 	button.classList.add('btn', 'btn-lg');
 	const outlineClass = isOn ? 'btn-danger' : 'btn-success';

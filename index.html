@@ -69,7 +69,7 @@
     </div>
     <div class="row">
       <div class="col border col border align-content-center flex-wrap">
-        <button type="button" class="btn btn-lg btn-success" id="Move servo">Повернуть серво</button>
+        <button type="button" class="btn btn-lg btn-success" id="Move servo">Повернуть сервопривод</button>
       </div>
       <div class="col border">
         <div class="p-3">
@@ -79,7 +79,7 @@
         </div>
       </div>
       <div class="col border align-content-center flex-wrap">
-          <button type="button" class="btn btn-outline-primary" id="Servo status">Текущая позиция сервопривода: 0</button>
+          <button type="button" class="btn btn-outline-primary" id="Servo status">Текущая позиция сервопривода: ...</button>
       </div>
     </div>
     <div class="row">
@@ -114,23 +114,13 @@
 					<label class="form-check-label" for="Continuous dosing">Непрерывное дозирование</label>
 				</div>
 				<div class="form-check">
-					<input class="form-check-input" type="radio" name="Dosing mode" id="Discrete dosing">
-					<label class="form-check-label" for="Discrete dosing">Дозирование порции</label>
+					<input class="form-check-input" type="radio" name="Dosing mode" id="Dosing by time">
+					<label class="form-check-label" for="Dosing by time">Дозирование порции по времени</label>
 				</div>
         <div class="form-check">
-					<input class="form-check-input" type="radio" name="Dosing mode" id="Pump calibration">
-					<label class="form-check-label" for="Pump calibration">Калибровка дозатора</label>
+					<input class="form-check-input" type="radio" name="Dosing mode" id="Dosing by volume">
+					<label class="form-check-label" for="Dosing by volume">Дозирование порции по объёму</label>
 				</div>
-      </div>
-      <div class="col border align-content-center flex-wrap">
-        <div class="p-3">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">Число шагов</span>
-            </div>
-            <input type="number" class="form-control" id="Steps count" min="0" step="100000" value="10000000">
-          </div>
-        </div>
       </div>
       <div class="col border align-content-center flex-wrap">
         <div class="p-3">
@@ -138,7 +128,17 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon2">Время, с</span>
             </div>
-            <input type="number" class="form-control" id="Pump time" min="10" step="10" value="60">
+            <input type="number" class="form-control" id="Dosing time" min="10" step="10" value="60">
+          </div>
+        </div>
+      </div>
+      <div class="col border align-content-center flex-wrap">
+        <div class="p-3">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Объём, мл</span>
+            </div>
+            <input type="number" class="form-control" id="Dosing volume" min="10" step="10" value="100">
           </div>
         </div>
       </div>

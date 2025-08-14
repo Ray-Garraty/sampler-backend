@@ -33,11 +33,11 @@ import {
   dateTimeField,
   cpuTempElt,
   modbusStatusField,
-  pumpContinuousModeInputElt,
-  pumpDiscreteModeInputElt,
-  pumpCalModeInputElt,
-  stepsCountInputElt,
+  pumpContinuousModeRadioElt,
+  pumpDiscreteByTimeRadioElt,
+  pumpDiscreteByVolRadioElt,
   timeInputElt,
+  volumeInputElt,
 } from './frontend/elements.js';
 
 const hostAddress = 'http://localhost:3000/';
@@ -53,108 +53,62 @@ const fetchChamberTempsAndUpdElts = async () => {
   const temperaturesResponse = await fetch(hostAddress + 'temperatures');
   const temps = await temperaturesResponse.json();
   if (temps.every(element => element === null)) {
-		console.log('No response from chamber temperature sensors...');
+		console.error('No response from chamber temperature sensors...');
 	} else {
-		console.log('Current temperatures:', temps);
+		// console.log('Current temperatures:', temps);
 		chamberTempFields.forEach((field, i) => {
       setChamberTempFieldStyle(field, temps[i], chambTempWarnThreshold);
     });
 	} 
 };
 
-const fetchCoolerStatus = async () => {
+const fetchCoolerStatusAndUpdElt = async () => {
   const response = await fetch(hostAddress + 'coolerStatus');
   const isCoolerOn = await response.json();
-  console.log({isCoolerOn});
-  return isCoolerOn;
+  // console.log({isCoolerOn});
+  coolerBtn.disabled = false;
+  setCoolerBtnStyle(coolerBtn, coolerBtnSpan, coolerSpinner, isCoolerOn);
 };
 
-const fetchPumpStatus = async () => {
+const fetchPumpStatusAndUpdElt = async () => {
   const response = await fetch(hostAddress + 'pumpStatus');
-  const pumpSpdAndDir = await response.json();
-  console.table(pumpSpdAndDir);
-  return pumpSpdAndDir;
+  const [spd, dir] = await response.json();
+  // console.table([spd, dir]);
+  pumpButton.disabled = false;
+  setPumpElementsStyle(
+    pumpButton,
+    pumpBtnSpan,
+    pumpSpeedInput,
+    cwDirRadioElt,
+    ccwDirRadioElt,
+    pumpSpinner,
+    spd > 0,
+    dir,
+    pumpContinuousModeRadioElt,
+    pumpDiscreteByTimeRadioElt,
+    pumpDiscreteByVolRadioElt,
+  );
 };
 
-const fetchModbusStatus = async () => {
+const fetchModbusStatusAndUpdElt = async () => {
   const response = await fetch(hostAddress + 'modbusStatus');
   const isModbusReady = await response.json();
-  console.log(isModbusReady);
-  return isModbusReady;
+  // console.log(isModbusReady);
+  setModbusFieldStyle(modbusStatusField, isModbusReady); ;
 };
 
 const fetchServoStatusAndUpdElt = async () => {
   const response = await fetch(hostAddress + 'servoStatus');
   const servoAngle = await response.json();
-  console.log({servoAngle});
-  return servoAngle;
+  // console.log({servoAngle});
+  setServoStatusEltStyle(servoStatusElt, servoAngle);
 };
 
 const fetchDateTimeAndUpdElt = async () => {
   const dateTimeResponse = await fetch(hostAddress + 'dateTime');
   const dateTime = await dateTimeResponse.json();
-  console.log({dateTime});
+  // console.log({dateTime});
   setDateTimeEltStyle(dateTimeField, dateTime);
-};
-
-fetchCoolerStatus()
-  .then(isOn => {
-    coolerBtn.disabled = false;
-    setCoolerBtnStyle(coolerBtn, coolerBtnSpan, coolerSpinner, isOn);
-  }).catch(err => {
-    console.error(err);
-  });
-
-fetchPumpStatus()
-  .then(([spd, dir]) => {
-    pumpButton.disabled = false;
-    setPumpElementsStyle(
-      pumpButton,
-      pumpBtnSpan,
-      pumpSpeedInput,
-      cwDirRadioElt,
-      ccwDirRadioElt,
-      pumpSpinner,
-      spd > 0,
-      dir,
-      pumpContinuousModeInputElt,
-      pumpDiscreteModeInputElt,
-      pumpCalModeInputElt
-    );
-  }).catch(err => {
-    console.error(err);
-  });
-
-fetchModbusStatus()
-  .then(isReady => {
-    setModbusFieldStyle(modbusStatusField, isReady); 
-  }).catch(err => {
-    console.error(err);
-  });
-
-fetchServoStatusAndUpdElt()
-  .then(angle => {
-    setServoStatusEltStyle(servoStatusElt, angle);
-  }).catch(err => {
-    console.error(err);
-  });
-
-fetchDateTimeAndUpdElt();
-
-let speed = Number(pumpSpeedInput.textContent || pumpSpeedInput.value);
-pumpSpeedOutput.textContent = speed;
-
-let angle = Number(servoAngleInput.textContent || servoAngleInput.value);
-servoAngleOutput.textContent = angle + '⁰';
-
-coolerSpinner.style.display = 'none';
-pumpSpinner.style.display = 'none';
-
-const fetchTubeSensorAndUpdElt = async () => {
-  const tubeSensorResponse = await fetch(hostAddress + 'tubeSensorStatus');
-  const isTubeEmpty = await tubeSensorResponse.json();
-  console.log({isTubeEmpty});
-  setTubeSensorFieldStyle(tubeSensorField, isTubeEmpty);
 };
 
 const fetchRtcTempAndUpdElt = async () => {
@@ -164,12 +118,28 @@ const fetchRtcTempAndUpdElt = async () => {
   setRtcTempEltStyle(rtcTempField, rtcTemp, rtcTempWarnThreshold);
 };
 
+const fetchTubeSensorAndUpdElt = async () => {
+  const tubeSensorResponse = await fetch(hostAddress + 'tubeSensorStatus');
+  const isTubeEmpty = await tubeSensorResponse.json();
+  console.log({isTubeEmpty});
+  setTubeSensorFieldStyle(tubeSensorField, isTubeEmpty);
+};
+
 const fetchCpuTempAndUpdElt = async () => {
   const response = await fetch(hostAddress + 'cpuTemperature');
   const cpuT = await response.json();
   console.log({cpuT});
   setCpuTempBtnStyle(cpuTempElt, cpuT, cpuTempThreshold);
 };
+
+let speed = Number(pumpSpeedInput.textContent || pumpSpeedInput.value);
+pumpSpeedOutput.textContent = speed;
+
+let angle = Number(servoAngleInput.textContent || servoAngleInput.value);
+servoAngleOutput.textContent = angle + '⁰';
+
+coolerSpinner.style.display = 'none';
+pumpSpinner.style.display = 'none';
 
 coolerBtn.addEventListener('click', async () => {  
   try {
@@ -185,9 +155,9 @@ pumpButton.addEventListener('click', async () => {
   pumpButton.disabled = true;
   cwDirRadioElt.disabled = true;
   ccwDirRadioElt.disabled = true;
-  pumpContinuousModeInputElt.disabled = true;
-  pumpDiscreteModeInputElt.disabled = true;
-  pumpCalModeInputElt.disabled = true;
+  pumpContinuousModeRadioElt.disabled = true;
+  pumpDiscreteByTimeRadioElt.disabled = true;
+  pumpDiscreteByVolRadioElt.disabled = true;
 
   const resp = await fetch(hostAddress + 'pumpStatus');
   const [crntSpd] = await resp.json();
@@ -199,9 +169,9 @@ pumpButton.addEventListener('click', async () => {
     return checkedElt.id;
   };
 
-  const reqMode = determinePumpMode([pumpContinuousModeInputElt, pumpDiscreteModeInputElt, pumpCalModeInputElt]);
-  const reqStepsCount = stepsCountInputElt.valueAsNumber;
+  const reqMode = determinePumpMode([pumpContinuousModeRadioElt, pumpDiscreteByTimeRadioElt, pumpDiscreteByVolRadioElt]);
   const reqTime = timeInputElt.valueAsNumber;
+  const reqVolume = volumeInputElt.valueAsNumber;
   const response = await fetch(hostAddress + 'managePump', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -209,8 +179,8 @@ pumpButton.addEventListener('click', async () => {
 			speed: speedToRequest, 
 			direction: dirToRequest,
       mode: reqMode,
-      stepsCount: reqStepsCount,
       time: reqTime,
+      volume: reqVolume,
 		})
 	});
 	const parsedResponse = await response.json();
@@ -222,9 +192,9 @@ pumpButton.addEventListener('click', async () => {
   pumpButton.disabled = false;
   cwDirRadioElt.disabled = false;
   ccwDirRadioElt.disabled = false;
-  pumpContinuousModeInputElt.disabled = false;
-  pumpDiscreteModeInputElt.disabled = false;
-  pumpCalModeInputElt.disabled = false;
+  pumpContinuousModeRadioElt.disabled = false;
+  pumpDiscreteByTimeRadioElt.disabled = false;
+  pumpDiscreteByVolRadioElt.disabled = false;
 
   setPumpElementsStyle(
     pumpButton,
@@ -235,9 +205,9 @@ pumpButton.addEventListener('click', async () => {
     pumpSpinner,
     isPumpOn,
     newDir,
-    pumpContinuousModeInputElt,
-    pumpDiscreteModeInputElt,
-    pumpCalModeInputElt
+    pumpContinuousModeRadioElt,
+    pumpDiscreteByTimeRadioElt,
+    pumpDiscreteByVolRadioElt,
   );
 });
 
@@ -262,12 +232,16 @@ servoAngleInput.addEventListener('input', () => {
   angle = servoAngleInput.valueAsNumber;
 });
 
+fetchCoolerStatusAndUpdElt();
+fetchPumpStatusAndUpdElt();
+fetchServoStatusAndUpdElt();
+fetchModbusStatusAndUpdElt();
+fetchDateTimeAndUpdElt();
+fetchRtcTempAndUpdElt();
+fetchCpuTempAndUpdElt();
+
 setInterval(fetchChamberTempsAndUpdElts, chamberTempsUpdatePeriod);
-
 setInterval(fetchTubeSensorAndUpdElt, tubeSensorUpdatePeriod);
-
 setInterval(fetchRtcTempAndUpdElt, rtcDataUpdatePeriod);
-
 setInterval(fetchDateTimeAndUpdElt, rtcDataUpdatePeriod);
-
 setInterval(fetchCpuTempAndUpdElt, cpuTempUpdatePeriod);

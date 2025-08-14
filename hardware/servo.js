@@ -1,31 +1,13 @@
-import os from 'node:os';
+'use strict';
 
-const moveServo = os.platform() === 'win32' ?
-  (prevAngle, angleToGo) => {
-    console.log('');
-    console.log('Previous Servo position was', prevAngle, 'degrees');
-    console.log('Rotating Servo by', angleToGo, 'degrees...');
-    if ((prevAngle + angleToGo) > 360) {
-      return prevAngle + angleToGo - 360;
-    } else if ((prevAngle + angleToGo) < -360) {
-      return prevAngle + angleToGo + 360;
-    } else {
-      return prevAngle + angleToGo;
-    }
-  } 
-: 
-  (prevAngle, angleToGo) => {
-    console.log('');
-    console.log('Previous Servo position was', prevAngle, 'degrees');
-    console.log('Rotating Servo by', angleToGo, 'degrees...');
-    if ((prevAngle + angleToGo) > 360) {
-      return prevAngle + angleToGo - 360;
-    } else if ((prevAngle + angleToGo) < -360) {
-      return prevAngle + angleToGo + 360;
-    } else {
-      return prevAngle + angleToGo;
-    }
-  } 
-;
-
-export default moveServo;
+export default (prevAngle, angleToGo) => {
+  console.log('\nPrevious Servo position was', prevAngle, '⁰');
+  console.log('Rotating Servo by', angleToGo, '⁰...\n');
+  if ((prevAngle + angleToGo) > 360) {
+    return prevAngle + angleToGo - 360;
+  } else if ((prevAngle + angleToGo) < -360) {
+    return prevAngle + angleToGo + 360;
+  } else {
+    return prevAngle + angleToGo;
+  }
+}

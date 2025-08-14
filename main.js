@@ -5,6 +5,7 @@ import express from 'express';
 import process from 'process';
 import readRtc from './hardware/rtc.js';
 import managePump from './hardware/pump.js';
+import rotateServo from './hardware/servo.js';
 import toggleCooler from './hardware/cooler.js';
 import readCpuTemp from './hardware/cpu_temp.js';
 import readTubeSensor from './hardware/tubesensors.js';
@@ -128,8 +129,8 @@ app.post('/managePump', async (req, res) => {
   console.table(req.body);
   console.log();
 
-  const { speed, direction, mode, stepsCount, time } = req.body;
-  managePump(speed, direction, mode, stepsCount, time)
+  const { speed, direction, mode, time, volume } = req.body;
+  managePump(speed, direction, mode, time, volume)
     .then(newSpeed => {
       pumpSpeed = newSpeed;
       pumpDir = direction;
@@ -144,7 +145,7 @@ app.post('/managePump', async (req, res) => {
 app.post('/manageServo', (req, res) => {
   const requestedAngle = req.body.angle;
   console.log('Received servo rotate request with angle:', requestedAngle);
-  servoPosition += requestedAngle;
+  servoPosition = rotateServo(servoPosition, requestedAngle);
   res.json({ message: 'New servo position is', data: { position: servoPosition } });
 });
 

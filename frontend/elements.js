@@ -13,12 +13,11 @@ export const ccwDirRadioElt = document.getElementById('Counterclockwise');
 
 export const pumpSpeedInput = document.getElementById('pumpSpeedRange');
 export const pumpSpeedOutput = document.getElementById('pumpSpeedRangeValue');
-export const pumpContinuousModeInputElt = document.getElementById('Continuous dosing');
-export const pumpDiscreteModeInputElt = document.getElementById('Discrete dosing');
-export const pumpModeSelectGroup = document.getElementsByName('Dosing mode');
-export const pumpCalModeInputElt = document.getElementById('Pump calibration');
-export const stepsCountInputElt = document.getElementById('Steps count');
-export const timeInputElt = document.getElementById('Pump time');
+export const pumpContinuousModeRadioElt = document.getElementById('Continuous dosing');
+export const pumpDiscreteByTimeRadioElt = document.getElementById('Dosing by time');
+export const pumpDiscreteByVolRadioElt = document.getElementById('Dosing by volume');
+export const timeInputElt = document.getElementById('Dosing time');
+export const volumeInputElt = document.getElementById('Dosing volume');
 
 export const servoButton = document.getElementById('Move servo');
 export const servoStatusElt = document.getElementById('Servo status');
