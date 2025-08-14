@@ -1,21 +1,21 @@
-'use strict'
+'use strict';
 
 import Gpio from 'onoff';
 import pwm from 'raspi-soft-pwm';
 
-export default (speed, direction, mode, stepsCount, volume) => {
+const dirPin = new Gpio.Gpio(532, 'out');
+const enPin = new Gpio.Gpio(528, 'out');
+
+export default (speed, direction, mode, stepsCount, timeInSec) => {
 	const stepPin = new pwm.SoftPWM({
 		pin: 'GPIO21',
 		frequency: speed // cannot be set less than 10 (Hz)
   });
     
-  const dirPin = new Gpio.Gpio(532, 'out');
-  const enPin = new Gpio.Gpio(528, 'out');
-		
 	const dirNum = direction === 'CW' ? 0 : 1;
 		
   console.log('\nApplying pump changes...');
-	console.table({speed, direction, mode, stepsCount, volume});
+	console.table({speed, direction, mode, stepsCount, timeInSec});
   console.log();
 
   return new Promise((resolve) => {
@@ -38,12 +38,16 @@ export default (speed, direction, mode, stepsCount, volume) => {
       console.log('\nDiscrete dosing mode is active');
       enPin.write(0); // enabled
       dirPin.write(dirNum);
-      for (let i = 0; i < stepsCount; i += 1) {
+      stepPin.write(0.5);
+      /* for (let i = 0; i < stepsCount; i += 1) {
         stepPin.write(0.5);
-      }
-      enPin.write(1); // disabled
-      stepPin.write(0);
-      resolve(0);
+      } */
+
+      setTimeout(() => {
+        enPin.write(1); // disabled
+        stepPin.write(0);
+        resolve(0);
+      }, timeInSec * 1000);
     }
 
     if (mode === 'Pump calibration') {

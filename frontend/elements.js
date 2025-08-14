@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 export const coolerBtn = document.getElementById('Cooler on/off'); 
 export const coolerSpinner = document.getElementById('coolerSpinner');
@@ -18,7 +18,7 @@ export const pumpDiscreteModeInputElt = document.getElementById('Discrete dosing
 export const pumpModeSelectGroup = document.getElementsByName('Dosing mode');
 export const pumpCalModeInputElt = document.getElementById('Pump calibration');
 export const stepsCountInputElt = document.getElementById('Steps count');
-export const volumeInputElt = document.getElementById('Volume');
+export const timeInputElt = document.getElementById('Pump time');
 
 export const servoButton = document.getElementById('Move servo');
 export const servoStatusElt = document.getElementById('Servo status');

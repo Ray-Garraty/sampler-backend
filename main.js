@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 import cors from 'cors';
 import express from 'express';
@@ -128,8 +128,8 @@ app.post('/managePump', async (req, res) => {
   console.table(req.body);
   console.log();
 
-  const { speed, direction, mode, stepsCount, volume } = req.body;
-  managePump(speed, direction, mode, stepsCount, volume)
+  const { speed, direction, mode, stepsCount, time } = req.body;
+  managePump(speed, direction, mode, stepsCount, time)
     .then(newSpeed => {
       pumpSpeed = newSpeed;
       pumpDir = direction;

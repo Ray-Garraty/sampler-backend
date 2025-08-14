@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 import {
   setCoolerBtnStyle,
@@ -37,7 +37,7 @@ import {
   pumpDiscreteModeInputElt,
   pumpCalModeInputElt,
   stepsCountInputElt,
-  volumeInputElt,
+  timeInputElt,
 } from './frontend/elements.js';
 
 const hostAddress = 'http://localhost:3000/';
@@ -201,7 +201,7 @@ pumpButton.addEventListener('click', async () => {
 
   const reqMode = determinePumpMode([pumpContinuousModeInputElt, pumpDiscreteModeInputElt, pumpCalModeInputElt]);
   const reqStepsCount = stepsCountInputElt.valueAsNumber;
-  const reqVolume = volumeInputElt.valueAsNumber;
+  const reqTime = timeInputElt.valueAsNumber;
   const response = await fetch(hostAddress + 'managePump', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -210,7 +210,7 @@ pumpButton.addEventListener('click', async () => {
 			direction: dirToRequest,
       mode: reqMode,
       stepsCount: reqStepsCount,
-      volume: reqVolume,
+      time: reqTime,
 		})
 	});
 	const parsedResponse = await response.json();
@@ -262,12 +262,12 @@ servoAngleInput.addEventListener('input', () => {
   angle = servoAngleInput.valueAsNumber;
 });
 
-// setInterval(fetchChamberTempsAndUpdElts, chamberTempsUpdatePeriod);
+setInterval(fetchChamberTempsAndUpdElts, chamberTempsUpdatePeriod);
 
-// setInterval(fetchTubeSensorAndUpdElt, tubeSensorUpdatePeriod);
+setInterval(fetchTubeSensorAndUpdElt, tubeSensorUpdatePeriod);
 
-// setInterval(fetchRtcTempAndUpdElt, rtcDataUpdatePeriod);
+setInterval(fetchRtcTempAndUpdElt, rtcDataUpdatePeriod);
 
-// setInterval(fetchDateTimeAndUpdElt, rtcDataUpdatePeriod);
+setInterval(fetchDateTimeAndUpdElt, rtcDataUpdatePeriod);
 
-// setInterval(fetchCpuTempAndUpdElt, cpuTempUpdatePeriod);
+setInterval(fetchCpuTempAndUpdElt, cpuTempUpdatePeriod);

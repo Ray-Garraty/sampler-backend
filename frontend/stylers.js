@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 export const setCoolerBtnStyle = (button, textSpan, spinner, isOn) => {
   textSpan.innerText = isOn ? 'Выключить Пельтье' : 'Включить Пельтье';
