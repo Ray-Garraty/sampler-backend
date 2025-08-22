@@ -16,20 +16,16 @@
   </head>
   <body>
     
-  <div class="container-fluid text-center">
+  <div class="container-fluid text-center fw-bold fs-4">
     <div class="row">
       <div class="col border col border align-content-center flex-wrap">
-        <div class="p-3">
-          <h5 class="card-title" id="Date & Time"></h5>
-        </div>
+        <div class="p-3 fs-3" id="Date & Time"></div>
       </div>
       <div class="col border align-content-center flex-wrap">
-        <div class="p-3">
-          <h5 class="card-title" id="Modbus status">Устанавливаю связь с modbus...</h5>
-        </div>
+        <div class="p-3 fs-3" id="Modbus status">Устанавливаю связь с modbus...</div>
       </div>
       <div class="col border align-content-center flex-wrap">
-        <div class="p-3">
+        <div class="p-3 fs-3">
           <button type="button" class="btn btn-lg btn-outline-secondary" id="Tube status">Опрос датчика воды...</button>
         </div>
       </div>
@@ -69,7 +65,7 @@
     </div>
     <div class="row">
       <div class="col border col border align-content-center flex-wrap">
-        <button type="button" class="btn btn-lg btn-success" id="Move servo">Повернуть сервопривод</button>
+        <button type="button" class="btn btn-lg btn-success fw-bold fs-4" id="Move servo">Повернуть сервопривод</button>
       </div>
       <div class="col border">
         <div class="p-3">
@@ -79,7 +75,7 @@
         </div>
       </div>
       <div class="col border align-content-center flex-wrap">
-          <button type="button" class="btn btn-outline-primary" id="Servo status">Текущая позиция сервопривода: ...</button>
+          <div class="p-3" id="Servo status">Текущая позиция сервопривода: ...</div>
       </div>
     </div>
     <div class="row">
@@ -90,11 +86,11 @@
 				</button>
       </div>
       <div class="col border align-content-center flex-wrap">
-        <div class="form-check">
+        <div class="form-check text-start">
 					<input class="form-check-input" type="radio" name="Rotation direction" id="Clockwise" disabled>
 					<label class="form-check-label" for="Clockwise">По часовой</label>
 				</div>
-				<div class="form-check">
+				<div class="form-check text-start">
 					<input class="form-check-input" type="radio" name="Rotation direction" id="Counterclockwise" disabled>
 					<label class="form-check-label" for="Counterclockwise">Против часовой</label>
 				</div>
@@ -109,26 +105,30 @@
     </div>
     <div class="row">
       <div class="col border align-content-center flex-wrap">
-        <div class="form-check">
+	    
+		<div class="form-check text-start">
 					<input class="form-check-input" type="radio" name="Dosing mode" id="Continuous dosing" checked>
-					<label class="form-check-label" for="Continuous dosing">Непрерывное дозирование</label>
-				</div>
-				<div class="form-check">
+					<label class="form-check-label text-start" for="Continuous dosing">Непрерывное дозир-е</label>
+		</div>
+		
+		<div class="form-check text-start">
 					<input class="form-check-input" type="radio" name="Dosing mode" id="Dosing by time">
-					<label class="form-check-label" for="Dosing by time">Дозирование порции по времени</label>
-				</div>
-        <div class="form-check">
+					<label class="form-check-label text-start" for="Dosing by time">Дозир-е по времени</label>
+		</div>				
+		      
+		<div class="form-check text-start">
 					<input class="form-check-input" type="radio" name="Dosing mode" id="Dosing by volume">
-					<label class="form-check-label" for="Dosing by volume">Дозирование порции по объёму</label>
-				</div>
+					<label class="form-check-label" for="Dosing by volume">Дозир-е по объёму</label>
+		</div>
+	
       </div>
       <div class="col border align-content-center flex-wrap">
         <div class="p-3">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon2">Время, с</span>
+              <span class="input-group-text fw-bold fs-4" id="basic-addon2">Время, с</span>
             </div>
-            <input type="number" class="form-control" id="Dosing time" min="10" step="10" value="60">
+            <input type="number" class="form-control fw-bold fs-4" id="Dosing time" min="10" step="10" value="60">
           </div>
         </div>
       </div>
@@ -136,9 +136,9 @@
         <div class="p-3">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">Объём, мл</span>
+              <span class="input-group-text fw-bold fs-4" id="basic-addon1">Объём, мл</span>
             </div>
-            <input type="number" class="form-control" id="Dosing volume" min="10" step="10" value="100">
+            <input type="number" class="form-control fw-bold fs-4" id="Dosing volume" min="10" step="10" value="100">
           </div>
         </div>
       </div>

@@ -9,8 +9,10 @@ RTC SCK 5 / 3 / 515
 
 Cooler Solid State Relay VCC: 11 / 17 / 529
 
-Tube Water Sensor data: 13 / 27 / 539
+Liquid Sensor Data: 13 / 27 / 539
 
 Stepper PULSE-STEP (yellow): 40 / 21 / 533
 Stepper DIR (white): 38 / 20 / 532
 Stepper EN (green): 36 / 16 / 528
+
+Flow Sensor Data: 15 / 22 / 534

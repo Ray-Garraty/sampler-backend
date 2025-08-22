@@ -1,9 +1,7 @@
-'use strict';
-
 export const setCoolerBtnStyle = (button, textSpan, spinner, isOn) => {
   textSpan.innerText = isOn ? 'Выключить Пельтье' : 'Включить Пельтье';
 	button.classList.remove(...button.classList);
-	button.classList.add('btn', 'btn-lg');
+	button.classList.add('btn', 'btn-lg', 'fw-bold', 'fs-4');
 	const outlineClass = isOn ? 'btn-danger' : 'btn-success';
 	button.classList.add(outlineClass);
 	if (isOn) {
@@ -36,7 +34,7 @@ export const setPumpElementsStyle = (
 	}
 	textSpan.innerText = isOn ? 'Остановить дозирование' : 'Запустить дозирование';
   button.classList.remove(...button.classList);
-	button.classList.add('btn', 'btn-lg');
+	button.classList.add('btn', 'btn-lg', 'fw-bold', 'fs-4');
 	const outlineClass = isOn ? 'btn-danger' : 'btn-success';
 	button.classList.add(outlineClass);
 	if (isOn) {
@@ -48,7 +46,7 @@ export const setPumpElementsStyle = (
 
 export const setChamberTempFieldStyle = (element, t, threshold) => {
   element.classList.remove(...element.classList);
-  element.classList.add('btn', 'btn-lg');
+  element.classList.add('btn', 'btn-lg', 'fw-bold', 'fs-3');
 	let outlineClass;
 	if (t == false) {
 		outlineClass = 'btn-outline-secondary';
@@ -62,7 +60,7 @@ export const setChamberTempFieldStyle = (element, t, threshold) => {
 
 export const setTubeSensorFieldStyle = (element, isEmpty) => {
   element.classList.remove(...element.classList);
-  element.classList.add('btn', 'btn-lg');
+  element.classList.add('btn', 'btn-lg', 'fw-bold');
   const outlineClass = isEmpty ? 'btn-outline-danger' : 'btn-outline-success';
   element.classList.add(outlineClass);
   element.innerText = isEmpty ? 'Трубка пустая' : 'В трубке есть вода';
@@ -76,7 +74,7 @@ export const setDateTimeEltStyle = (element, dateTime) => {
 
 export const setRtcTempEltStyle = (element, t, threshold) => {
   element.classList.remove(...element.classList);
-  element.classList.add('btn', 'btn-lg');
+  element.classList.add('btn', 'btn-lg', 'fw-bold');
   const outlineClass = t > threshold ? 'btn-outline-danger' : 'btn-outline-success';
   element.classList.add(outlineClass);
   element.innerText = `t контроллера: ${t}⁰C`;
@@ -84,7 +82,7 @@ export const setRtcTempEltStyle = (element, t, threshold) => {
 
 export const setCpuTempBtnStyle = (element, t, threshold) => {
   element.classList.remove(...element.classList);
-  element.classList.add('btn', 'btn-lg');
+  element.classList.add('btn', 'btn-lg', 'fw-bold');
   const outlineClass = t > threshold ? 'btn-outline-danger' : 'btn-outline-success';
   element.classList.add(outlineClass);
   element.innerText = `t ЦП: ${t}⁰C`;
@@ -93,7 +91,7 @@ export const setCpuTempBtnStyle = (element, t, threshold) => {
 export const setModbusFieldStyle = (element, isReady) => {
   const colorClass = isReady ? 'text-success' : 'text-danger';
   element.classList.add(colorClass);
-  element.innerText = isReady ? 'Готов к приёму команд по MODBUS' : 'Ошибка USB-RS485 конвертера';
+  element.innerText = isReady ? 'MODBUS готов' : 'Ошибка USB-RS485 конвертера';
 };
 
 export const setServoStatusEltStyle = (element, angle) => {

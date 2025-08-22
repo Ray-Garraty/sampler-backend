@@ -1,8 +1,9 @@
-'use strict';
-
 import cors from 'cors';
+import path from 'path';
 import express from 'express';
 import process from 'process';
+import { fileURLToPath } from 'url';
+import { fork } from 'child_process';
 import readRtc from './hardware/rtc.js';
 import managePump from './hardware/pump.js';
 import rotateServo from './hardware/servo.js';
@@ -17,10 +18,15 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-const tempInquirePeriod = 3000; // in ms
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// in ms
+const tempInquirePeriod = 3000;
 const tubeSensorInquirePeriod = 1000;
 const rtcInquirePeriod = 5000;
 const cpuTempInquirePeriod = 5000;
+const flowInquirePeriod = 1000;
 
 let isCoolerOn = false;
 
@@ -35,6 +41,7 @@ let caseTemperature = null;
 let dateTime = null;
 let cpuTemperature = null;
 let isModBusOK = null;
+let flow = 0;
 
 app.listen(port, () => {
   console.log(`\nBackend is listening at http://localhost:${port}\n`);
@@ -80,6 +87,19 @@ const inquireCpuTemp = async () => {
   cpuTemperature = await readCpuTemp();
 };
 setInterval(inquireCpuTemp, cpuTempInquirePeriod);
+
+const flowMeterProcess = fork(__dirname + '/hardware/flowmeter.js');
+flowMeterProcess.on('message', (data) => {
+  flow = data;
+  console.log(`Flow meter rate: ${flow}`);
+});
+flowMeterProcess.on('close', (code) => {
+  console.log(`Flow meter process exited with code ${code}`);
+});
+const inquireFlow = async () => {
+  await flowMeterProcess.send('Give me the flow rate');
+};
+setInterval(inquireFlow, flowInquirePeriod);
 
 app.get('/coolerStatus', (req, res) => {
   res.send(isCoolerOn);
