@@ -19,7 +19,7 @@
   <div class="container-fluid text-center fw-bold fs-4">
     <div class="row">
       <div class="col border col border align-content-center flex-wrap">
-        <div class="p-3 fs-3" id="Date & Time"></div>
+        <div class="p-3 fs-2" id="Date & Time"></div>
       </div>
       <div class="col border align-content-center flex-wrap">
         <div class="p-3 fs-3" id="Modbus status">Устанавливаю связь с modbus...</div>
@@ -86,11 +86,11 @@
 				</button>
       </div>
       <div class="col border align-content-center flex-wrap">
-        <div class="form-check text-start">
+        <div class="form-check text-start mb-2">
 					<input class="form-check-input" type="radio" name="Rotation direction" id="Clockwise" disabled>
 					<label class="form-check-label" for="Clockwise">По часовой</label>
 				</div>
-				<div class="form-check text-start">
+				<div class="form-check text-start mb-2">
 					<input class="form-check-input" type="radio" name="Rotation direction" id="Counterclockwise" disabled>
 					<label class="form-check-label" for="Counterclockwise">Против часовой</label>
 				</div>
@@ -105,42 +105,37 @@
     </div>
     <div class="row">
       <div class="col border align-content-center flex-wrap">
-	    
-		<div class="form-check text-start">
-					<input class="form-check-input" type="radio" name="Dosing mode" id="Continuous dosing" checked>
-					<label class="form-check-label text-start" for="Continuous dosing">Непрерывное дозир-е</label>
-		</div>
-		
-		<div class="form-check text-start">
-					<input class="form-check-input" type="radio" name="Dosing mode" id="Dosing by time">
-					<label class="form-check-label text-start" for="Dosing by time">Дозир-е по времени</label>
-		</div>				
-		      
-		<div class="form-check text-start">
-					<input class="form-check-input" type="radio" name="Dosing mode" id="Dosing by volume">
-					<label class="form-check-label" for="Dosing by volume">Дозир-е по объёму</label>
-		</div>
-	
+        <div class="form-check text-start mb-2">
+          <input class="form-check-input" type="radio" name="Dosing mode" id="Continuous dosing" checked>
+          <label class="form-check-label text-start" for="Continuous dosing">Непрерывное дозир-е</label>
+        </div>
+        <div class="form-check text-start mb-2">
+          <input class="form-check-input" type="radio" name="Dosing mode" id="Dosing by time">
+          <label class="form-check-label text-start" for="Dosing by time">Дозир-е по времени</label>
+        </div>				  
+        <div class="form-check text-start mb-2">
+          <input class="form-check-input" type="radio" name="Dosing mode" id="Dosing by volume">
+          <label class="form-check-label" for="Dosing by volume">Дозир-е по объёму</label>
+        </div>
       </div>
       <div class="col border align-content-center flex-wrap">
         <div class="p-3">
-          <div class="input-group mb-3">
+          <div class="input-group mb-1">
             <div class="input-group-prepend">
               <span class="input-group-text fw-bold fs-4" id="basic-addon2">Время, с</span>
             </div>
             <input type="number" class="form-control fw-bold fs-4" id="Dosing time" min="10" step="10" value="60">
           </div>
-        </div>
-      </div>
-      <div class="col border align-content-center flex-wrap">
-        <div class="p-3">
-          <div class="input-group mb-3">
+          <div class="input-group mb-1">
             <div class="input-group-prepend">
               <span class="input-group-text fw-bold fs-4" id="basic-addon1">Объём, мл</span>
             </div>
             <input type="number" class="form-control fw-bold fs-4" id="Dosing volume" min="10" step="10" value="100">
           </div>
-        </div>
+        </div>    
+      </div>
+      <div class="col border align-content-center flex-wrap">
+        <div class="p-3 border text-primary" id="Flow">Скорость потока: ...</div>
       </div>
     </div>
 </div>

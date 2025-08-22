@@ -1,46 +1,45 @@
-'use strict';
+/* eslint-disable n/no-unsupported-features/node-builtins */
 
 import {
-  setCoolerBtnStyle,
-  setPumpElementsStyle,
-  setChamberTempFieldStyle,
-  setTubeSensorFieldStyle,
-  setRtcTempEltStyle,
-  setDateTimeEltStyle,
-  setCpuTempBtnStyle,
-  setModbusFieldStyle,
-  setServoStatusEltStyle,
-} from './frontend/stylers.js';
-
-import {
-  coolerBtn,
-  coolerSpinner,
-  coolerBtnSpan,
-  pumpButton,
-  pumpSpinner,
-  pumpBtnSpan,
-  cwDirRadioElt,
   ccwDirRadioElt,
-  pumpSpeedInput,
-  pumpSpeedOutput,
-  servoButton,
-  servoStatusElt,
-  servoAngleInput,
-  servoAngleOutput,
   chamberTempFields,
-  tubeSensorField,
-  rtcTempField,
-  dateTimeField,
+  coolerBtn,
+  coolerBtnSpan,
+  coolerSpinner,
   cpuTempElt,
+  cwDirRadioElt,
+  dateTimeField,
   modbusStatusField,
+  pumpBtnSpan,
+  pumpButton,
   pumpContinuousModeRadioElt,
   pumpDiscreteByTimeRadioElt,
   pumpDiscreteByVolRadioElt,
+  pumpSpeedInput,
+  pumpSpeedOutput,
+  pumpSpinner,
+  rtcTempField,
+  servoAngleInput,
+  servoAngleOutput,
+  servoButton,
+  servoStatusElt,
   timeInputElt,
+  tubeSensorField,
   volumeInputElt,
-} from './frontend/elements.js';
+} from "./frontend/elements.js";
+import {
+  setChamberTempFieldStyle,
+  setCoolerBtnStyle,
+  setCpuTempBtnStyle,
+  setDateTimeEltStyle,
+  setModbusFieldStyle,
+  setPumpElementsStyle,
+  setRtcTempEltStyle,
+  setServoStatusEltStyle,
+  setTubeSensorFieldStyle,
+} from "./frontend/stylers.js";
 
-const hostAddress = 'http://localhost:3000/';
+const hostAddress = "http://localhost:3000/";
 const chambTempWarnThreshold = 4.5;
 const rtcTempWarnThreshold = 35;
 const cpuTempThreshold = 75;
@@ -50,20 +49,20 @@ const rtcDataUpdatePeriod = 10000;
 const cpuTempUpdatePeriod = 5000;
 
 const fetchChamberTempsAndUpdElts = async () => {
-  const temperaturesResponse = await fetch(hostAddress + 'temperatures');
+  const temperaturesResponse = await fetch(`${hostAddress}temperatures`);
   const temps = await temperaturesResponse.json();
-  if (temps.every(element => element === null)) {
-		console.error('No response from chamber temperature sensors...');
-	} else {
-		// console.log('Current temperatures:', temps);
-		chamberTempFields.forEach((field, i) => {
+  if (temps.every((element) => element === null)) {
+    console.error("No response from chamber temperature sensors...");
+  } else {
+    // console.log('Current temperatures:', temps);
+    chamberTempFields.forEach((field, i) => {
       setChamberTempFieldStyle(field, temps[i], chambTempWarnThreshold);
     });
-	} 
+  }
 };
 
 const fetchCoolerStatusAndUpdElt = async () => {
-  const response = await fetch(hostAddress + 'coolerStatus');
+  const response = await fetch(`${hostAddress}coolerStatus`);
   const isCoolerOn = await response.json();
   // console.log({isCoolerOn});
   coolerBtn.disabled = false;
@@ -71,7 +70,7 @@ const fetchCoolerStatusAndUpdElt = async () => {
 };
 
 const fetchPumpStatusAndUpdElt = async () => {
-  const response = await fetch(hostAddress + 'pumpStatus');
+  const response = await fetch(`${hostAddress}pumpStatus`);
   const [spd, dir] = await response.json();
   // console.table([spd, dir]);
   pumpButton.disabled = false;
@@ -91,44 +90,44 @@ const fetchPumpStatusAndUpdElt = async () => {
 };
 
 const fetchModbusStatusAndUpdElt = async () => {
-  const response = await fetch(hostAddress + 'modbusStatus');
+  const response = await fetch(`${hostAddress}modbusStatus`);
   const isModbusReady = await response.json();
   // console.log(isModbusReady);
-  setModbusFieldStyle(modbusStatusField, isModbusReady); ;
+  setModbusFieldStyle(modbusStatusField, isModbusReady);
 };
 
 const fetchServoStatusAndUpdElt = async () => {
-  const response = await fetch(hostAddress + 'servoStatus');
+  const response = await fetch(`${hostAddress}servoStatus`);
   const servoAngle = await response.json();
   // console.log({servoAngle});
   setServoStatusEltStyle(servoStatusElt, servoAngle);
 };
 
 const fetchDateTimeAndUpdElt = async () => {
-  const dateTimeResponse = await fetch(hostAddress + 'dateTime');
+  const dateTimeResponse = await fetch(`${hostAddress}dateTime`);
   const dateTime = await dateTimeResponse.json();
   // console.log({dateTime});
   setDateTimeEltStyle(dateTimeField, dateTime);
 };
 
 const fetchRtcTempAndUpdElt = async () => {
-  const response = await fetch(hostAddress + 'caseTemperature');
+  const response = await fetch(`${hostAddress}caseTemperature`);
   const rtcTemp = await response.json();
-  console.log({rtcTemp});
+  console.log({ rtcTemp });
   setRtcTempEltStyle(rtcTempField, rtcTemp, rtcTempWarnThreshold);
 };
 
 const fetchTubeSensorAndUpdElt = async () => {
-  const tubeSensorResponse = await fetch(hostAddress + 'tubeSensorStatus');
+  const tubeSensorResponse = await fetch(`${hostAddress}tubeSensorStatus`);
   const isTubeEmpty = await tubeSensorResponse.json();
-  console.log({isTubeEmpty});
+  console.log({ isTubeEmpty });
   setTubeSensorFieldStyle(tubeSensorField, isTubeEmpty);
 };
 
 const fetchCpuTempAndUpdElt = async () => {
-  const response = await fetch(hostAddress + 'cpuTemperature');
+  const response = await fetch(`${hostAddress}cpuTemperature`);
   const cpuT = await response.json();
-  console.log({cpuT});
+  console.log({ cpuT });
   setCpuTempBtnStyle(cpuTempElt, cpuT, cpuTempThreshold);
 };
 
@@ -136,14 +135,14 @@ let speed = Number(pumpSpeedInput.textContent || pumpSpeedInput.value);
 pumpSpeedOutput.textContent = speed;
 
 let angle = Number(servoAngleInput.textContent || servoAngleInput.value);
-servoAngleOutput.textContent = angle + '⁰';
+servoAngleOutput.textContent = `${angle}⁰`;
 
-coolerSpinner.style.display = 'none';
-pumpSpinner.style.display = 'none';
+coolerSpinner.style.display = "none";
+pumpSpinner.style.display = "none";
 
-coolerBtn.addEventListener('click', async () => {  
+coolerBtn.addEventListener("click", async () => {
   try {
-    const response = await fetch(hostAddress + 'toggleCooler');
+    const response = await fetch(`${hostAddress}toggleCooler`);
     const isCoolerOn = await response.json();
     setCoolerBtnStyle(coolerBtn, coolerBtnSpan, coolerSpinner, isCoolerOn);
   } catch (error) {
@@ -151,7 +150,7 @@ coolerBtn.addEventListener('click', async () => {
   }
 });
 
-pumpButton.addEventListener('click', async () => {
+pumpButton.addEventListener("click", async () => {
   pumpButton.disabled = true;
   cwDirRadioElt.disabled = true;
   ccwDirRadioElt.disabled = true;
@@ -159,34 +158,38 @@ pumpButton.addEventListener('click', async () => {
   pumpDiscreteByTimeRadioElt.disabled = true;
   pumpDiscreteByVolRadioElt.disabled = true;
 
-  const resp = await fetch(hostAddress + 'pumpStatus');
+  const resp = await fetch(`${hostAddress}pumpStatus`);
   const [crntSpd] = await resp.json();
   const speedToRequest = crntSpd > 0 ? 0 : speed;
-  const dirToRequest = cwDirRadioElt.checked ? 'CW' : 'CCW';
-  
+  const dirToRequest = cwDirRadioElt.checked ? "CW" : "CCW";
+
   const determinePumpMode = (elements) => {
-    const [checkedElt] = elements.filter(elt => elt.checked);
+    const [checkedElt] = elements.filter((elt) => elt.checked);
     return checkedElt.id;
   };
 
-  const reqMode = determinePumpMode([pumpContinuousModeRadioElt, pumpDiscreteByTimeRadioElt, pumpDiscreteByVolRadioElt]);
+  const reqMode = determinePumpMode([
+    pumpContinuousModeRadioElt,
+    pumpDiscreteByTimeRadioElt,
+    pumpDiscreteByVolRadioElt,
+  ]);
   const reqTime = timeInputElt.valueAsNumber;
   const reqVolume = volumeInputElt.valueAsNumber;
-  const response = await fetch(hostAddress + 'managePump', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ 
-			speed: speedToRequest, 
-			direction: dirToRequest,
+  const response = await fetch(`${hostAddress}managePump`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      speed: speedToRequest,
+      direction: dirToRequest,
       mode: reqMode,
       time: reqTime,
       volume: reqVolume,
-		})
-	});
-	const parsedResponse = await response.json();
+    }),
+  });
+  const parsedResponse = await response.json();
   console.table(parsedResponse.data);
-	console.log('Pump speed is', parsedResponse.data.speed, 'now');
-	const isPumpOn = parsedResponse.data.speed > 0;
+  console.log("Pump speed is", parsedResponse.data.speed, "now");
+  const isPumpOn = parsedResponse.data.speed > 0;
   const newDir = parsedResponse.data.direction;
 
   pumpButton.disabled = false;
@@ -211,24 +214,24 @@ pumpButton.addEventListener('click', async () => {
   );
 });
 
-pumpSpeedInput.addEventListener('input', () => {
+pumpSpeedInput.addEventListener("input", () => {
   pumpSpeedOutput.textContent = pumpSpeedInput.value;
   speed = pumpSpeedInput.valueAsNumber;
 });
 
-servoButton.addEventListener('click', async () => {
-  const response = await fetch(hostAddress + 'manageServo', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ angle: angle })
-	});
-	const parsedResponse = await response.json();
+servoButton.addEventListener("click", async () => {
+  const response = await fetch(`${hostAddress}manageServo`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ angle }),
+  });
+  const parsedResponse = await response.json();
   const newPosition = parsedResponse.data.position;
-	setServoStatusEltStyle(servoStatusElt, newPosition);
+  setServoStatusEltStyle(servoStatusElt, newPosition);
 });
 
-servoAngleInput.addEventListener('input', () => {
-  servoAngleOutput.textContent = servoAngleInput.value + '⁰';
+servoAngleInput.addEventListener("input", () => {
+  servoAngleOutput.textContent = `${servoAngleInput.value}⁰`;
   angle = servoAngleInput.valueAsNumber;
 });
 
