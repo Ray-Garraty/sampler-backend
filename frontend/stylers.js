@@ -110,3 +110,7 @@ export const setModbusFieldStyle = (element, isReady) => {
 export const setServoStatusEltStyle = (element, angle) => {
   element.innerText = `Текущая позиция сервопривода: ${angle}⁰`;
 };
+
+export const setFlowEltStyle = (element, flow) => {
+  element.innerText = `Скорость потока: ${flow}`;
+};

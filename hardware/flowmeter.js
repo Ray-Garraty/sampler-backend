@@ -21,7 +21,7 @@ inputPin.watch((err, value) => {
 	}
 	if (lastRisingTime !== 0n && lastFallingTime > lastRisingTime) {
 		period = lastFallingTime - lastRisingTime;
-		frequency = (1 / (Number(period) / 1_000_000_000)).toFixed(2);
+		frequency = Math.round(1 / (Number(period) / 1_000_000_000));
 		// console.log(`Flow sensor output: ${frequency} Hz`);
 	}
 });

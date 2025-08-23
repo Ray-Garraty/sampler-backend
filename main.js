@@ -144,6 +144,10 @@ app.get('/modbusStatus', (req, res) => {
   res.send(isModBusOK);
 });
 
+app.get('/flow', (req, res) => {
+  res.send(flow);
+});
+
 app.post('/managePump', async (req, res) => {
   console.log('\nReceived manage pump request:');
   console.table(req.body);

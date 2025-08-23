@@ -1,4 +1,5 @@
 /* eslint-disable n/no-unsupported-features/node-builtins */
+/* eslint-disable import-x/extensions */
 
 import {
   ccwDirRadioElt,
@@ -9,6 +10,7 @@ import {
   cpuTempElt,
   cwDirRadioElt,
   dateTimeField,
+  flowElement,
   modbusStatusField,
   pumpBtnSpan,
   pumpButton,
@@ -32,6 +34,7 @@ import {
   setCoolerBtnStyle,
   setCpuTempBtnStyle,
   setDateTimeEltStyle,
+  setFlowEltStyle,
   setModbusFieldStyle,
   setPumpElementsStyle,
   setRtcTempEltStyle,
@@ -40,6 +43,7 @@ import {
 } from "./frontend/stylers.js";
 
 const hostAddress = "http://localhost:3000/";
+
 const chambTempWarnThreshold = 4.5;
 const rtcTempWarnThreshold = 35;
 const cpuTempThreshold = 75;
@@ -47,6 +51,7 @@ const chamberTempsUpdatePeriod = 3000;
 const tubeSensorUpdatePeriod = 1000;
 const rtcDataUpdatePeriod = 10000;
 const cpuTempUpdatePeriod = 5000;
+const flowUpdatePeriod = 1000;
 
 const fetchChamberTempsAndUpdElts = async () => {
   const temperaturesResponse = await fetch(`${hostAddress}temperatures`);
@@ -113,22 +118,28 @@ const fetchDateTimeAndUpdElt = async () => {
 const fetchRtcTempAndUpdElt = async () => {
   const response = await fetch(`${hostAddress}caseTemperature`);
   const rtcTemp = await response.json();
-  console.log({ rtcTemp });
+  // console.log({ rtcTemp });
   setRtcTempEltStyle(rtcTempField, rtcTemp, rtcTempWarnThreshold);
 };
 
 const fetchTubeSensorAndUpdElt = async () => {
   const tubeSensorResponse = await fetch(`${hostAddress}tubeSensorStatus`);
   const isTubeEmpty = await tubeSensorResponse.json();
-  console.log({ isTubeEmpty });
+  // console.log({ isTubeEmpty });
   setTubeSensorFieldStyle(tubeSensorField, isTubeEmpty);
 };
 
 const fetchCpuTempAndUpdElt = async () => {
   const response = await fetch(`${hostAddress}cpuTemperature`);
   const cpuT = await response.json();
-  console.log({ cpuT });
+  // console.log({ cpuT });
   setCpuTempBtnStyle(cpuTempElt, cpuT, cpuTempThreshold);
+};
+
+const fetchFlowAndUpdElt = async () => {
+  const response = await fetch(`${hostAddress}flow`);
+  const flow = await response.json();
+  setFlowEltStyle(flowElement, flow);
 };
 
 let speed = Number(pumpSpeedInput.textContent || pumpSpeedInput.value);
@@ -242,9 +253,11 @@ fetchModbusStatusAndUpdElt();
 fetchDateTimeAndUpdElt();
 fetchRtcTempAndUpdElt();
 fetchCpuTempAndUpdElt();
+fetchFlowAndUpdElt();
 
 setInterval(fetchChamberTempsAndUpdElts, chamberTempsUpdatePeriod);
 setInterval(fetchTubeSensorAndUpdElt, tubeSensorUpdatePeriod);
 setInterval(fetchRtcTempAndUpdElt, rtcDataUpdatePeriod);
 setInterval(fetchDateTimeAndUpdElt, rtcDataUpdatePeriod);
 setInterval(fetchCpuTempAndUpdElt, cpuTempUpdatePeriod);
+setInterval(fetchFlowAndUpdElt, flowUpdatePeriod);
